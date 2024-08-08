@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    container_name: "app"
+    restart: on-failure:5
+    depends_on: 
+      - db
+    env_file: ".env"
+  db:
+    container_name: db
+    image: mysql
+    volumes:
+      - ./data/db:/var/lib/mysql
+    env_file: ".env"

@@ -1,0 +1,268 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+  binaryTargets   = ["native", "linux-musl-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model club {
+  club_id    String   @id @db.VarChar(2)
+  name_long  String   @db.VarChar(45)
+  name_short String?  @db.VarChar(45)
+  member     member[]
+}
+
+model event {
+  league_id     String          @db.VarChar(45)
+  season_id     String          @db.VarChar(45)
+  event_number  Int
+  event_date    DateTime        @db.Date
+  season        season          @relation(fields: [league_id, season_id], references: [league_id, season_id], map: "fk__event__season")
+  organiser     organiser[]
+  race          race[]
+  points_sparse points_sparse[]
+
+  @@id([league_id, season_id, event_number])
+}
+
+model grade {
+  league_id     String          @db.VarChar(45)
+  season_id     String          @db.VarChar(10)
+  grade_id      String          @db.VarChar(3)
+  name          String          @db.VarChar(45)
+  gender        String          @db.VarChar(1)
+  difficulty    Int
+  season        season          @relation(fields: [league_id, season_id], references: [league_id, season_id], map: "fk__grade__season")
+  grade_mapping grade_mapping[]
+  competitor    competitor[]
+
+  @@id([league_id, season_id, grade_id])
+}
+
+model grade_mapping {
+  league_id    String @db.VarChar(45)
+  season_id    String @db.VarChar(45)
+  event_number Int
+  race_number  Int
+  grade_id     String @db.VarChar(3)
+  race_grade   String @db.VarChar(45)
+  grade        grade  @relation(fields: [league_id, season_id, grade_id], references: [league_id, season_id, grade_id], map: "fk__grade_mapping__grade")
+  race         race   @relation(fields: [league_id, season_id, event_number, race_number], references: [league_id, season_id, event_number, race_number], map: "fk__grade_mapping__race")
+
+  @@id([league_id, season_id, event_number, race_number, grade_id])
+  @@index([league_id, season_id, grade_id], map: "fk__grade_mapping__grade")
+}
+
+model league {
+  league_id String   @id @db.VarChar(10)
+  name      String?  @db.VarChar(45)
+  image     String?  @db.VarChar(10)
+  season    season[]
+}
+
+model member {
+  onz_id          Int
+  membership_year String    @db.VarChar(4)
+  club_id         String    @db.VarChar(2)
+  club            club      @relation(fields: [club_id], references: [club_id], map: "fk__member__club")
+  orienteer       orienteer @relation(fields: [onz_id], references: [onz_id], map: "fk__member__orienteer")
+
+  @@id([onz_id, membership_year, club_id])
+  @@index([club_id], map: "fk__member__club")
+}
+
+model organiser {
+  league_id         String                      @db.VarChar(45)
+  season_id         String                      @db.VarChar(45)
+  event_number      Int
+  organiser_role_id organiser_organiser_role_id
+  onz_id            Int
+  event             event                       @relation(fields: [league_id, season_id, event_number], references: [league_id, season_id, event_number], map: "fk__organiser__event")
+  orienteer         orienteer                   @relation(fields: [onz_id], references: [onz_id], map: "fk__organiser__orienteer")
+
+  @@id([league_id, season_id, event_number, organiser_role_id, onz_id])
+  @@index([onz_id], map: "fk__organiser__orienteer")
+}
+
+model orienteer {
+  onz_id     Int          @id
+  last_name  String       @db.VarChar(45)
+  first_name String       @db.VarChar(45)
+  DOB        DateTime     @db.Date
+  gender     String       @db.VarChar(1)
+  member     member[]
+  organiser  organiser[]
+  result     result[]
+  competitor competitor[]
+}
+
+model race {
+  league_id     String          @db.VarChar(45)
+  season_id     String          @db.VarChar(45)
+  event_number  Int
+  race_number   Int
+  discipline    race_discipline
+  map           String          @db.VarChar(45)
+  time          Int?
+  max_score     Int?
+  grade_mapping grade_mapping[]
+  event         event           @relation(fields: [league_id, season_id, event_number], references: [league_id, season_id, event_number], map: "fk__race__event")
+  result        result[]
+
+  @@id([league_id, season_id, event_number, race_number])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model result {
+  league_id        String                   @db.VarChar(45)
+  season_id        String                   @db.VarChar(45)
+  event_number     Int
+  race_number      Int
+  onz_id           Int
+  status_result_id result_status_result_id?
+  race_grade       String                   @db.VarChar(45)
+  time             Int?
+  raw_score        Int?
+  score            Int?
+  orienteer        orienteer                @relation(fields: [onz_id], references: [onz_id], map: "fk__result__orienteer")
+  race             race                     @relation(fields: [league_id, season_id, event_number, race_number], references: [league_id, season_id, event_number, race_number], map: "fk__result__race")
+
+  @@id([league_id, season_id, event_number, race_number, onz_id, race_grade])
+  @@index([onz_id], map: "fk__result__orienteer")
+}
+
+model season {
+  league_id            String       @db.VarChar(10)
+  season_id            String       @db.VarChar(45)
+  num_events           Int
+  max_points           Int
+  min_points           Int
+  required_events      Int
+  participation_points Int
+  last_event           Int
+  provisional          Boolean
+  event                event[]
+  grade                grade[]
+  league               league       @relation(fields: [league_id], references: [league_id], map: "fk__season__league")
+  competitor           competitor[]
+
+  @@id([league_id, season_id])
+  @@index([league_id], map: "fk__season__league")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view result_collapsed {
+  league_id     String   @db.VarChar(45)
+  season_id     String   @db.VarChar(45)
+  onz_id        Int
+  event_number  Int
+  time          Decimal? @db.Decimal(32, 0)
+  race_grade    String?  @db.VarChar(45)
+  status_result String   @default("") @db.VarChar(3)
+  raw_score     Decimal? @db.Decimal(32, 0)
+  score         Decimal? @db.Decimal(32, 0)
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view points_sparse {
+  league_id            String   @default("") @db.VarChar(45)
+  season_id            String   @default("") @db.VarChar(45)
+  onz_id               Int      @default(0)
+  event_number         Int      @default(0)
+  status_grade         String   @default("") @db.VarChar(13)
+  status_result        String   @default("") @db.VarChar(4)
+  points               Decimal? @db.Decimal(62, 4)
+  counts_towards_total Int      @default(0)
+  event                event?   @relation(fields: [league_id, season_id, event_number], references: [league_id, season_id, event_number])
+
+  @@id([league_id, season_id, event_number, onz_id])
+  @@map("points")
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view competitor {
+  league_id         String     @db.VarChar(45)
+  season_id         String     @db.VarChar(45)
+  onz_id            Int
+  grade_id          String     @db.VarChar(3)
+  eligibility_id    String     @default("") @db.VarChar(4)
+  total_points      Decimal?   @db.Decimal(65, 4)
+  predicted_points  Decimal?   @db.Decimal(65, 8)
+  placing           BigInt     @default(0) @db.UnsignedBigInt
+  predicted_placing BigInt     @default(0) @db.UnsignedBigInt
+  points            points[]
+  orienteer         orienteer? @relation(fields: [onz_id], references: [onz_id])
+  grade             grade?     @relation(fields: [league_id, season_id, grade_id], references: [league_id, season_id, grade_id])
+  season            season?    @relation(fields: [league_id, season_id], references: [league_id, season_id])
+
+  @@id([league_id, season_id, onz_id])
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view competitor_eligibility {
+  league_id      String @db.VarChar(45)
+  season_id      String @db.VarChar(45)
+  onz_id         Int
+  grade_id       String @db.VarChar(3)
+  eligibility_id String @default("") @db.VarChar(4)
+  num_results    BigInt @default(0)
+  events_needed  BigInt @default(0)
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view competitor_placing {
+  league_id         String   @default("") @db.VarChar(45)
+  season_id         String   @default("") @db.VarChar(45)
+  onz_id            Int      @default(0)
+  total_points      Decimal? @db.Decimal(65, 4)
+  prediction        Decimal? @db.Decimal(65, 8)
+  grade_id          String   @db.VarChar(3)
+  placing           BigInt   @default(0) @db.UnsignedBigInt
+  predicted_placing BigInt   @default(0) @db.UnsignedBigInt
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view points {
+  league_id            String      @db.VarChar(45)
+  season_id            String      @db.VarChar(45)
+  onz_id               Int
+  event_number         Int
+  status_grade         String?     @default("") @db.VarChar(13)
+  status_result        String?     @default("") @db.VarChar(4)
+  points               Decimal?    @db.Decimal(62, 4)
+  counts_towards_total Int?        @default(0)
+  competitor           competitor? @relation(fields: [league_id, season_id, onz_id], references: [league_id, season_id, onz_id])
+
+  @@id([league_id, season_id, event_number, onz_id])
+  @@map("points_dense")
+}
+
+enum organiser_organiser_role_id {
+  PLAN
+  CTRL
+}
+
+enum result_status_result_id {
+  DNF
+  DNS
+  MP
+  OK
+}
+
+enum race_discipline {
+  FOR
+  SCO
+  NGT
+  MTB
+  SPR
+}
