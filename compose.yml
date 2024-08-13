@@ -2,13 +2,16 @@ services:
   app:
     build: .
     container_name: "app"
-    restart: on-failure:5
     depends_on: 
       - db
+    ports: 
+     - "3000:3000"
     env_file: ".env"
   db:
     container_name: db
     image: mysql
     volumes:
       - ./data/db:/var/lib/mysql
+    ports:
+      - "3307:3306"
     env_file: ".env"
