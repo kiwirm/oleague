@@ -7,6 +7,11 @@ services:
     ports: 
      - "3000:3000"
     env_file: ".env"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`oypoints.papo.org.nz`)"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+
   db:
     container_name: db
     image: mysql
@@ -15,3 +20,16 @@ services:
     ports:
       - "3307:3306"
     env_file: ".env"
+
+  traefik:
+    image: traefik:v2.5
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
