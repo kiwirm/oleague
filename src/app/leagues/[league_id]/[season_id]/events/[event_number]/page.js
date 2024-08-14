@@ -1,6 +1,38 @@
 import PageTitle from "@/components/page_title";
 import PageSubtitle from "@/components/page_subtitle";
 
+import prisma from "@/lib/prisma";
+
+export async function generateStaticParams() {
+  const leagues = await prisma.league.findMany({
+    select: {
+      league_id: true,
+      season: {
+        select: {
+          season_id: true,
+          event: {
+            select: {
+              event_number: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const paths = leagues.flatMap((league) =>
+    league.season.flatMap((season) =>
+      season.event.map((event) => ({
+        league_id: league.league_id.toString(),
+        season_id: season.season_id.toString(),
+        event_number: event.event_number.toString(),
+      }))
+    )
+  );
+
+  return paths;
+}
+
 export default async function EventPage({
   params: { league_id, season_id, event_number },
 }) {

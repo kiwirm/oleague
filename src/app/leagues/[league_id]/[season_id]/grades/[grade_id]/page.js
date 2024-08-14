@@ -6,6 +6,36 @@ import RowHeader from "./row_header";
 import ResultCell from "./result_cell";
 import PageTitle from "@/components/page_title";
 
+export async function generateStaticParams() {
+  const leagues = await prisma.league.findMany({
+    select: {
+      league_id: true,
+      season: {
+        select: {
+          season_id: true,
+          event: {
+            select: {
+              event_number: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const paths = leagues.flatMap((league) =>
+    league.season.flatMap((season) =>
+      season.event.map((event) => ({
+        league_id: league.league_id.toString(),
+        season_id: season.season_id.toString(),
+        event_number: event.event_number.toString(),
+      }))
+    )
+  );
+
+  return paths;
+}
+
 export default async function PointsPage({
   params: { league_id, season_id, grade_id },
 }) {
