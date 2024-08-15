@@ -9,9 +9,10 @@ services:
     env_file: ".env"
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.rule=Host(`oypoints.papo.org.nz`)"
       - "traefik.http.services.app.loadbalancer.server.port=3000"
-
+      - "traefik.http.routers.app.tls.certresolver=le"
   db:
     container_name: db
     image: mysql
@@ -28,8 +29,17 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--providers.docker.exposedbydefault=false"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.le.acme.email=michael@smithson.co.nz"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
+      - ./data/letsencrypt:/letsencrypt
