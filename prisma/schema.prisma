@@ -34,7 +34,7 @@ model grade {
   season_id     String          @db.VarChar(10)
   grade_id      String          @db.VarChar(3)
   name          String          @db.VarChar(45)
-  gender        String          @db.VarChar(1)
+  gender        String?         @db.VarChar(1)
   difficulty    Int
   season        season          @relation(fields: [league_id, season_id], references: [league_id, season_id], map: "fk__grade__season")
   grade_mapping grade_mapping[]
@@ -94,6 +94,7 @@ model orienteer {
   first_name String       @db.VarChar(45)
   DOB        DateTime     @db.Date
   gender     String       @db.VarChar(1)
+  full_name  String?      @db.VarChar(255)
   member     member[]
   organiser  organiser[]
   result     result[]
@@ -152,6 +153,18 @@ model season {
 
   @@id([league_id, season_id])
   @@index([league_id], map: "fk__season__league")
+}
+
+model control {
+  id Int @id @default(autoincrement()) @db.UnsignedInt
+}
+
+model course {
+  id Int @id @default(autoincrement()) @db.UnsignedInt
+}
+
+model split {
+  id Int @id @default(autoincrement()) @db.UnsignedInt
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

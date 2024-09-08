@@ -1,11 +1,11 @@
-export default function TextWithIcon({ icon, text, right }) {
+export default function TextWithIcon({ icon, text, children }: { icon: string | Array<string>, text: string, children?: React.ReactNode}) {
   if (!Array.isArray(icon)) {
     icon = [icon];
   }
 
   return (
     <div
-      className={`flex ${right ? "flex-row-reverse" : "flex-row"} items-center`}
+      className={`flex ${children ? "flex-row-reverse" : "flex-row"} items-center`}
     >
       {icon.map((icon, index) => (
         <span

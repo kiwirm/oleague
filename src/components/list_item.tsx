@@ -1,5 +1,20 @@
 import Link from "next/link";
-export default function Card({ header, summary, href, more, more_href }) {
+import React from "react";
+export default function ListItem({
+  header,
+  summary,
+  href,
+  more,
+  more_href,
+  highlighted,
+}: {
+  header: React.ReactNode;
+  summary: React.ReactNode;
+  href: string;
+  more?: React.ReactNode;
+  more_href?: string;
+  highlighted?: boolean;
+}) {
   return (
     <div
       className="
@@ -10,11 +25,11 @@ export default function Card({ header, summary, href, more, more_href }) {
           <div className="text-md sm:text-xl font-bold mr-4 flex flex-row items-center gap-4">
             {header}
           </div>
-          <div className="flex flex-col sm:flex-row sm:gap-4 *:text-gray-400">
+          <div className="flex flex-col sm:flex-row sm:gap-4 *:text-muted-foreground">
             {summary}
           </div>
         </Link>
-        {more && (
+        {more && more_href && (
           <Link href={more_href}>
             <div>{more}</div>
           </Link>

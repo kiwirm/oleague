@@ -1,9 +1,11 @@
-import PageTitle from "@/components/page_title";
-import prisma from "@/lib/prisma";
-import Card from "@/components/card";
-import TextWithIcon from "@/components/text_with_icon";
+import ListItem from "@/components/list_item";
 import PageSubtitle from "@/components/page_subtitle";
-import ProvisionalBadge from "@/components/provisional_badge";
+import PageTitle from "@/components/page_title";
+import TextWithIcon from "@/components/text_with_icon";
+import { Badge } from "@/components/ui/badge";
+import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import prisma from "@/lib/prisma";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   const leagues = await prisma.league.findMany({
@@ -12,15 +14,21 @@ export async function generateStaticParams() {
     },
   });
 
-  return leagues.map((league) => ({
+  const paths = leagues.map((league) => ({
     league_id: league.league_id.toString(),
   }));
+
+  return paths;
 }
 
-export default async function LeaguePage({ params: { league_id } }) {
+export default async function LeaguePage({
+  params,
+}: {
+  params: { league_id: string };
+}) {
   const league = await prisma.league.findUnique({
     where: {
-      league_id: league_id,
+      league_id: params.league_id,
     },
     include: {
       season: {
@@ -37,27 +45,35 @@ export default async function LeaguePage({ params: { league_id } }) {
     },
   });
   const seasons = await prisma.season.findMany({});
+
+  if (league === null) {
+    return notFound();
+  }
   return (
     <>
-      <PageTitle
-        title={league.name}
-        subtitle={"oleagues.nz"}
-        subtitle_href="/"
+      <Breadcrumbs
+        links={[
+          { href: "/", text: "oleagues.nz" },
+          { href: "/leagues", text: "Leagues" },
+          { href: `/leagues/${league.league_id}`, text: league.name! },
+        ]}
       />
 
-      <div className="mb-4 text-gray-500">
+      <PageTitle>{league.name}</PageTitle>
+
+      <div className="mb-4 text-muted-foreground">
         <TextWithIcon text={league.season.length + " Seasons"} icon="sunny" />
       </div>
 
-      <PageSubtitle subtitle="Seasons" />
+      <PageSubtitle>Seasons</PageSubtitle>
       <div>
         {league.season.map((season) => (
-          <Card
-            href={`/leagues/${league_id}/${season.season_id}`}
+          <ListItem
+            href={`/leagues/${league.league_id}/${season.season_id}`}
             key={season.season_id}
             header={
               <>
-                <ProvisionalBadge provisional={season.provisional} />
+                <Badge>{season.provisional ? "Provisional" : "Final"}</Badge>
                 {season.season_id + " Season"}
               </>
             }

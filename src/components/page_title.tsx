@@ -2,10 +2,15 @@ import Link from "next/link";
 import TextWithIcon from "./text_with_icon";
 
 export default function PageTitle({
-  title,
+  children,
   subtitle,
   underline,
   subtitle_href,
+}: {
+  children: React.ReactNode;
+  subtitle?: string;
+  underline?: boolean;
+  subtitle_href?: string;
 }) {
   return (
     <div className="mt-8 mb-12">
@@ -14,7 +19,7 @@ export default function PageTitle({
           underline && "underline"
         }`}
       >
-        {title}
+        {children}
       </h1>
       {subtitle && (
         <Link href={subtitle_href || ""}>

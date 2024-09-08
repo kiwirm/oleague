@@ -29,7 +29,7 @@ export default function ResultCell(competitor, points) {
         "border-r border-t p-3 " +
         (points.counts_towards_total && competitor.eligibility_id !== "INEL"
           ? derivationColors[points.status_result]
-          : "text-gray-400 italic")
+          : "text-muted-foreground italic")
       }
     >
       <div className="text-2xl font-bold font-title">

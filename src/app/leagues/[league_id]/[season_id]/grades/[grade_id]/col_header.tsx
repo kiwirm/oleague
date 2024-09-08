@@ -1,4 +1,5 @@
 import TextWithIcon from "@/components/text_with_icon";
+import { Prisma } from "@prisma/client";
 import React from "react";
 
 const iconMap = {
@@ -9,7 +10,13 @@ const iconMap = {
   SCO: "workspaces",
 };
 
-export default function ColHeader(oevent) {
+export const eventsWithRaces = Prisma.validator<Prisma.eventDefaultArgs>()({
+  include: { race: true },
+});
+
+export default function ColHeader(
+  oevent: Prisma.eventGetPayload<typeof eventsWithRaces>[]
+) {
   return (
     <React.Fragment>
       <th className="w-28">
