@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 import { notFound } from "next/navigation";
-import PointsChart from "./points_chart";
+import MedalsChart from "./chart_medals";
+import PlacingsChart from "./chart_placings";
+import PointsChart from "./chart_points";
 
 export const GradeWithIncludes = Prisma.validator<Prisma.gradeDefaultArgs>()({
   include: {
@@ -49,7 +51,7 @@ export default async function StatsPage({
       },
       season: {
         include: {
-          event: true,
+          event: { include: { race: true } },
         },
       },
     },
@@ -59,14 +61,37 @@ export default async function StatsPage({
     return notFound();
   }
 
+  // TODO make different competitors selectable
+  const selectedCompetitors = grade.competitor.map((competitor) => [
+    competitor.onz_id,
+    competitor.points,
+  ]);
+  console.log(selectedCompetitors);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <PointsChart
-        competitors={grade.competitor.slice(0, 5)}
-        events={grade.season.event}
-      />
-      {/* <PlacingsChart grade={grade} /> */}
-      {/* <MedalsChart grade={grade} /> */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+      <div className="flex flex-col items-center">
+        <h1 className="mt-6 mb-2 font-bold text-xl font-title">
+          Accumulated points
+        </h1>
+        <div className="h-72 w-full">
+          <PointsChart grade={grade} />
+        </div>
+      </div>
+      <div className="flex flex-col items-center font-title">
+        <h1 className="mt-6 mb-2 font-bold text-xl">Placings over time</h1>
+        <div className="h-72 w-full">
+          <PlacingsChart grade={grade} />
+        </div>
+      </div>
+      <div className="flex flex-col items-center">
+        <h1 className="mt-6 mb-2 font-bold text-xl font-title">
+          Medal allocation
+        </h1>
+        <div className="h-72 w-full">
+          <MedalsChart grade={grade} />
+        </div>
+      </div>
     </div>
   );
 }

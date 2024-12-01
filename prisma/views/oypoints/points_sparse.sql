@@ -523,6 +523,7 @@ WITH `potential_grade_allocated_results` AS (
     `calculated_points`.`season_id` AS `season_id`,
     `calculated_points`.`onz_id` AS `onz_id`,
     `calculated_points`.`event_number` AS `event_number`,
+    `calculated_points`.`grade_id` AS `grade_id`,
     `calculated_points`.`status_grade` AS `status_grade`,
     `calculated_points`.`status_result` AS `status_result`,
     `calculated_points`.`points` AS `points`,
@@ -531,7 +532,15 @@ WITH `potential_grade_allocated_results` AS (
       AND (
         `oypoints`.`competitor_eligibility`.`eligibility_id` <> 'INEL'
       )
-    ) AS `counts_towards_total`
+    ) AS `counts_towards_total`,
+    rank() OVER (
+      PARTITION BY `calculated_points`.`league_id`,
+      `calculated_points`.`season_id`,
+      `calculated_points`.`event_number`,
+      `calculated_points`.`grade_id`
+      ORDER BY
+        `calculated_points`.`points` DESC
+    ) AS `placing`
   FROM
     (
       (
@@ -576,6 +585,7 @@ SELECT
   `points_with_counts`.`status_grade` AS `status_grade`,
   `points_with_counts`.`status_result` AS `status_result`,
   `points_with_counts`.`points` AS `points`,
-  `points_with_counts`.`counts_towards_total` AS `counts_towards_total`
+  `points_with_counts`.`counts_towards_total` AS `counts_towards_total`,
+  `points_with_counts`.`placing` AS `placing`
 FROM
   `points_with_counts`

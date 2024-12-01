@@ -15,7 +15,7 @@ export default async function RowHeader(competitor) {
   return (
     <>
       <th
-        className={`sticky left-0 bg-inherit border-t text-2xl sm:text-4xl text-right font-title ${
+        className={`border-t text-2xl sm:text-4xl text-center font-title ${
           iconMap[competitor.eligibility_id].style
         }}`}
       >
@@ -24,7 +24,7 @@ export default async function RowHeader(competitor) {
           : `(${competitor.placing})`}
       </th>
       <th
-        className={`sticky left-14 bg-inherit w-96 border-t border-r text-sm sm:text-base font-title text-left ${
+        className={`sticky left-0 truncate max-w-32 lg:max-w-none lg:text-nowrap px-3 bg-inherit min-w-32 h-20 border-t border-r z-10 text-sm sm:text-base font-title text-left ${
           iconMap[competitor.eligibility_id].style
         }`}
       >

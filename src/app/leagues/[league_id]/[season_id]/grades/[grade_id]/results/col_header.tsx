@@ -4,8 +4,8 @@ import { iconMap } from "../../../page";
 
 export default function ColHeader({ event }: { event: event }) {
   return (
-    <th className="text-center w-28">
-      <div className="-rotate-45 pl-3 absolute origin-top-left overflow-ellipsis">
+    <th className="min-w-20 align-bottom pb-4">
+      <div className="-rotate-45 pl-3 absolute origin-top-left">
         <div className="flex flex-row h-6">
           <TextWithIcon
             text={"OY " + event.event_number}
@@ -15,8 +15,8 @@ export default function ColHeader({ event }: { event: event }) {
             {event.event_date.toLocaleDateString()}
           </span>
         </div>
-        <div className="w-40 h-5 text-left ml-5 overflow-ellipsis">
-          {event.race[0].map}
+        <div className="w-32 truncate text-left ml-5">
+          {event.race.map((race) => race.map).join(", ")}
         </div>
       </div>
       <div className="text-xs"></div>

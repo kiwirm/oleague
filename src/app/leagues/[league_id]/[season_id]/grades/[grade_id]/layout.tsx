@@ -1,6 +1,5 @@
 import Navbar from "@/components/navbar";
 import PageTitle from "@/components/page_title";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
@@ -55,28 +54,22 @@ export default async function GradeLayout({
       <PageTitle>{grade.name}</PageTitle>
       <nav className="mb-4">
         <ul className="flex space-x-4">
-          <li></li>
-          <li></li>
-        </ul>
-      </nav>
-      <Tabs defaultValue="results">
-        <TabsList>
-          <TabsTrigger value="results">
+          <li className="text-gray-500">
             <Link
               href={`/leagues/${params.league_id}/${params.season_id}/grades/${params.grade_id}/results`}
             >
               Results
             </Link>
-          </TabsTrigger>
-          <TabsTrigger value="stats">
+          </li>
+          <li className="text-gray-500">
             <Link
               href={`/leagues/${params.league_id}/${params.season_id}/grades/${params.grade_id}/stats`}
             >
               Stats
             </Link>
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+          </li>
+        </ul>
+      </nav>
       {children}
     </>
   );

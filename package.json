@@ -25,6 +25,7 @@
     "lucide-react": "^0.438.0",
     "material-symbols": "^0.21.1",
     "next": "^15.0.0-rc.0",
+    "next-themes": "^0.4.3",
     "ordinal": "^1.0.3",
     "prisma": "^5.15.1",
     "react": "^19.0.0-rc-b57d2823-20240822",

@@ -104,15 +104,21 @@ export default async function LeagueSeasonPage({
         </div>
       </PageTitle>
       <div className="mb-4 text-muted-foreground">
-        <TextWithIcon text={season.event.length + " Events"} icon="forest" />
-        <TextWithIcon
-          text={season.competitor.length + " Competitors"}
-          icon="sprint"
-        />
-        <TextWithIcon
-          text={season.grade.length + " Grades"}
-          icon="receipt_long"
-        />
+        <span className="mr-4">
+          <TextWithIcon text={season.event.length + " Events"} icon="forest" />
+        </span>
+        <span className="mr-4">
+          <TextWithIcon
+            text={season.competitor.length + " Competitors"}
+            icon="sprint"
+          />
+        </span>
+        <span>
+          <TextWithIcon
+            text={season.grade.length + " Grades"}
+            icon="receipt_long"
+          />
+        </span>
       </div>
       <PageSubtitle>Events</PageSubtitle>
       {season.event.map((oevent) => (

@@ -192,6 +192,7 @@ view points_sparse {
   status_result        String   @default("") @db.VarChar(4)
   points               Decimal? @db.Decimal(62, 4)
   counts_towards_total Int      @default(0)
+  placing              BigInt   @default(0) @db.UnsignedBigInt
   event                event?   @relation(fields: [league_id, season_id, event_number], references: [league_id, season_id, event_number])
 
   @@id([league_id, season_id, event_number, onz_id])
@@ -254,6 +255,7 @@ view points {
   status_result        String?     @default("") @db.VarChar(4)
   points               Decimal?    @db.Decimal(62, 4)
   counts_towards_total Int?        @default(0)
+  placing              BigInt?     @default(0) @db.UnsignedBigInt
   competitor           competitor? @relation(fields: [league_id, season_id, onz_id], references: [league_id, season_id, onz_id])
 
   @@id([league_id, season_id, event_number, onz_id])

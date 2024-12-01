@@ -44,22 +44,21 @@ export default async function ResultsPage({
   }
 
   return (
-    <div className="relative max-w-full overflow-x-auto pt-32">
+    <div className="relative max-w-full overflow-x-auto">
+      <div className="w-32 h-32 sticky left-0 bg-white z-10"></div>
       <table className="relative w-full border-collapse">
         <thead>
           <tr className="border-b">
-            <th className="sticky bg-background left-0 z-20 w-32 text-right border-r">
+            <th className="border-r">
               {grade.season.provisional ? "Current Placing" : "Place"}
             </th>
-            <th className="sticky bg-background left-16 z-20 w-48 text-left border-r">
+            <th className="sticky bg-background left-0 z-10 w-32 border-r">
               Competitor
             </th>
             {grade.season.event.map((oevent) => (
               <ColHeader key={oevent.event_number} event={oevent} />
             ))}
-            <th className="sticky bg-background right-0 z-20 text-right w-20 pr-3 border-l">
-              Points
-            </th>
+            <th className="text-right w-20 pr-3 border-l">Points</th>
           </tr>
         </thead>
         <tbody>

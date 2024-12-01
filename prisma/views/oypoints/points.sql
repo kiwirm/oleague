@@ -27,7 +27,8 @@ SELECT
   `oypoints`.`points`.`status_grade` AS `status_grade`,
   `oypoints`.`points`.`status_result` AS `status_result`,
   `oypoints`.`points`.`points` AS `points`,
-  `oypoints`.`points`.`counts_towards_total` AS `counts_towards_total`
+  `oypoints`.`points`.`counts_towards_total` AS `counts_towards_total`,
+  `oypoints`.`points`.`placing` AS `placing`
 FROM
   (
     `events_matrix`
