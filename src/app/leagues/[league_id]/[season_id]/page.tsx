@@ -1,13 +1,13 @@
 import ListItem from "@/components/list_item";
+import Navbar from "@/components/navbar";
 import PageSubtitle from "@/components/page_subtitle";
 import PageTitle from "@/components/page_title";
 import TextWithIcon from "@/components/text_with_icon";
 import { Badge } from "@/components/ui/badge";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
-const iconMap = {
+export const iconMap = {
   FOR: "forest",
   SPR: "location_city",
   MTB: "directions_bike",
@@ -81,8 +81,8 @@ export default async function LeagueSeasonPage({
 
   return (
     <>
-      <Breadcrumbs
-        links={[
+      <Navbar
+        breadcrumbLinks={[
           { href: "/", text: "oleagues.nz" },
           { href: "/leagues", text: "Leagues" },
           {
@@ -103,7 +103,6 @@ export default async function LeagueSeasonPage({
           </Badge>
         </div>
       </PageTitle>
-
       <div className="mb-4 text-muted-foreground">
         <TextWithIcon text={season.event.length + " Events"} icon="forest" />
         <TextWithIcon
@@ -148,12 +147,11 @@ export default async function LeagueSeasonPage({
           }
         />
       ))}
-
       <PageSubtitle>Grades</PageSubtitle>
       {season.grade.map((grade) => (
         <ListItem
           key={grade.grade_id}
-          href={`${grade.season_id}/grades/${grade.grade_id}`}
+          href={`${grade.season_id}/grades/${grade.grade_id}/results`}
           header={grade.name}
           summary={
             grade.competitor[0].orienteer ? (

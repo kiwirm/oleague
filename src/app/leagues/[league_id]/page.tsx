@@ -1,9 +1,9 @@
 import ListItem from "@/components/list_item";
+import Navbar from "@/components/navbar";
 import PageSubtitle from "@/components/page_subtitle";
 import PageTitle from "@/components/page_title";
 import TextWithIcon from "@/components/text_with_icon";
 import { Badge } from "@/components/ui/badge";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
@@ -51,8 +51,8 @@ export default async function LeaguePage({
   }
   return (
     <>
-      <Breadcrumbs
-        links={[
+      <Navbar
+        breadcrumbLinks={[
           { href: "/", text: "oleagues.nz" },
           { href: "/leagues", text: "Leagues" },
           { href: `/leagues/${league.league_id}`, text: league.name! },
@@ -73,7 +73,9 @@ export default async function LeaguePage({
             key={season.season_id}
             header={
               <>
-                <Badge>{season.provisional ? "Provisional" : "Final"}</Badge>
+                <Badge className="mr-2">
+                  {season.provisional ? "Provisional" : "Final"}
+                </Badge>
                 {season.season_id + " Season"}
               </>
             }

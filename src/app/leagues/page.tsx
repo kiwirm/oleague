@@ -2,9 +2,10 @@ import prisma from "@/lib/prisma";
 import Image, { StaticImageData } from "next/image";
 
 import ListItem from "@/components/list_item";
+import Navbar from "@/components/navbar";
 import PageTitle from "@/components/page_title";
 import TextWithIcon from "@/components/text_with_icon";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import NOCLogo from "@/public/noc.jpg";
 import ONZLogo from "@/public/onz.png";
 import PAPOLogo from "@/public/papo.png";
@@ -24,16 +25,11 @@ const leagues = await prisma.league.findMany({
   },
 });
 
-export default async function LeaguesPage({ showBreadcrumbs = true }) {
+export default async function LeaguesPage({ showNavbar = true }) {
   return (
     <div className="object-fill">
-      {showBreadcrumbs && (
-        <Breadcrumbs
-          links={[
-            { href: "/", text: "oleagues.nz" },
-            { href: "/leagues", text: "Leagues" },
-          ]}
-        />
+      {showNavbar && (
+        <Navbar breadcrumbLinks={[{ label: "Leagues", href: "/leagues" }]} />
       )}
       <PageTitle>Leagues</PageTitle>
       {leagues.map((league) => (
@@ -46,7 +42,7 @@ export default async function LeaguesPage({ showBreadcrumbs = true }) {
               <>
                 <Image
                   src={logos[league!.image]}
-                  width={60}
+                  width={48}
                   alt={league.name}
                   className="inline pr-5"
                 />
@@ -62,11 +58,9 @@ export default async function LeaguesPage({ showBreadcrumbs = true }) {
           }
           more={
             league.season[0] && (
-              <TextWithIcon
-                // className="first:border-t border-b"
-                icon="arrow_forward_ios"
-                text={"Jump to " + league.season[0].season_id + " season"}
-              />
+              <Button variant="outline" className="hidden sm:block">
+                {"Jump to " + league.season[0].season_id + " season"}
+              </Button>
             )
           }
           more_href={

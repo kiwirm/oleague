@@ -1,5 +1,5 @@
+import { Breadcrumbs } from "@/app/breadcrumb";
 import Title from "@/components/page_title";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import GithubMark from "@/public/github-mark.png";
 import Image from "next/image";
 
@@ -24,7 +24,7 @@ export default function AboutPage() {
         Prisma, MySQL, Docker
       </p>
       <p className="mb-8">
-        Mixed Static/SSG rendering using Next 15 server actions
+        Mixed Static/SSG rendering using Next 15 server actions and App Router
       </p>
 
       <a

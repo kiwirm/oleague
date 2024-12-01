@@ -66,6 +66,12 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+  .fixed-container {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+    position: relative;
+  }
 }
 
 @layer base {

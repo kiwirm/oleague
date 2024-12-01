@@ -1,12 +1,11 @@
 import PageTitle from "@/components/page_title";
 import OrienteerSearch from "./search";
 
+import Navbar from "@/components/navbar";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import prisma from "@/lib/prisma";
-import { AlertTriangle } from "lucide-react";
 
-export default async function OrienteersPage({ showBreadcrumbs = true }) {
+export default async function OrienteersPage({ showNavbar = true }) {
   const orienteers = await prisma.orienteer.findMany({
     where: {
       member: {
@@ -21,20 +20,21 @@ export default async function OrienteersPage({ showBreadcrumbs = true }) {
 
   return (
     <>
-      {showBreadcrumbs && (
-        <Breadcrumbs
-          links={[
-            { href: "/", text: "oleagues.nz" },
-            { href: "./orienteers", text: "Orienteers" },
-          ]}
+      {showNavbar && (
+        <Navbar
+          breadcrumbLinks={[{ label: "Orienteers", href: "/orienteers" }]}
         />
       )}
       <PageTitle>Orienteers</PageTitle>
       <div>
         <OrienteerSearch orienteers={orienteers} />
         <Alert variant="warning" className="mt-4">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertTitle>Not fully implemented</AlertTitle>
+          <AlertTitle>
+            <span className="material-symbols-rounded align-text-bottom pr-1">
+              Warning
+            </span>
+            Not fully implemented
+          </AlertTitle>
           <AlertDescription>
             Search implemented for PAPO orienteers only
           </AlertDescription>

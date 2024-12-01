@@ -1,5 +1,5 @@
+import Navbar from "@/components/navbar";
 import Title from "@/components/page_title";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import prisma from "@/lib/prisma";
 import ImportForm from "./form";
 
@@ -12,10 +12,10 @@ export default async function ImportPage() {
 
   return (
     <>
-      <Breadcrumbs
-        links={[
-          { href: "/", text: "oleagues.nz" },
-          { href: "/admin/import", text: "Import Results (Admin)" },
+      <Navbar
+        breadcrumbLinks={[
+          { label: "Admin", href: "/admin" },
+          { label: "Import", href: "/admin/import" },
         ]}
       />
       <Title>Import Results</Title>

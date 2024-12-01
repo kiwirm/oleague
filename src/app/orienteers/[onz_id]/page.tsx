@@ -1,11 +1,11 @@
-import PageSubtitle from "@/components/page_subtitle";
-import prisma from "../../../lib/prisma";
-import PageTitle from "@/components/page_title";
 import ListItem from "@/components/list_item";
+import Navbar from "@/components/navbar";
+import PageSubtitle from "@/components/page_subtitle";
+import PageTitle from "@/components/page_title";
 import TextWithIcon from "@/components/text_with_icon";
-import ordinal from "ordinal";
 import { notFound } from "next/navigation";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import ordinal from "ordinal";
+import prisma from "../../../lib/prisma";
 
 export default async function OrienteerPage({
   params,
@@ -45,11 +45,10 @@ export default async function OrienteerPage({
 
   return (
     <div>
-      <Breadcrumbs
-        links={[
-          { href: "/", text: "oleagues.nz" },
-          { href: "../", text: "Orienteers" },
-          { href: ".", text: orienteer.full_name! },
+      <Navbar
+        breadcrumbLinks={[
+          { label: "Orienteers", href: "/orienteers" },
+          { label: orienteer.name, href: `/orienteers/${params.onz_id}` },
         ]}
       />
       <PageTitle>
@@ -110,7 +109,6 @@ export default async function OrienteerPage({
                   icon="check_circle"
                 />
                 <TextWithIcon
-                  //TODO: why bigint
                   text={ordinal(Number(competitor.placing)) + " Place"}
                   icon="trophy"
                 />
@@ -118,7 +116,7 @@ export default async function OrienteerPage({
             }
             href={`/leagues/${competitor.season!.league_id}/${
               competitor.season!.season_id
-            }/grades/${competitor.grade_id}`}
+            }/grades/${competitor.grade_id}/results`}
           />
         ))}
     </div>

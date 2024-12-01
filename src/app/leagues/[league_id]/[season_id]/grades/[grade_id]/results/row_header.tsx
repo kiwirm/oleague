@@ -15,7 +15,7 @@ export default async function RowHeader(competitor) {
   return (
     <>
       <th
-        className={`border-t px-3 text-2xl sm:text-4xl text-right font-title ${
+        className={`sticky left-0 bg-inherit border-t text-2xl sm:text-4xl text-right font-title ${
           iconMap[competitor.eligibility_id].style
         }}`}
       >
@@ -24,19 +24,19 @@ export default async function RowHeader(competitor) {
           : `(${competitor.placing})`}
       </th>
       <th
-        className={`w-96 border-t border-r px-3 text-sm sm:text-base font-title text-left ${
+        className={`sticky left-14 bg-inherit w-96 border-t border-r text-sm sm:text-base font-title text-left ${
           iconMap[competitor.eligibility_id].style
         }`}
       >
         <Link
           href={`/orienteers/${competitor.onz_id}`}
         >{`${competitor.orienteer.first_name} ${competitor.orienteer.last_name}`}</Link>
-        <span className="font-medium">
+        <div className="font-medium">
           <TextWithIcon
             text={iconMap[competitor.eligibility_id].name}
             icon={iconMap[competitor.eligibility_id].icon}
           />
-        </span>
+        </div>
       </th>
     </>
   );

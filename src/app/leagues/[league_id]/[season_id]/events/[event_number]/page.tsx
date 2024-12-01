@@ -1,9 +1,9 @@
-import PageTitle from "@/components/page_title";
 import PageSubtitle from "@/components/page_subtitle";
+import PageTitle from "@/components/page_title";
 
-import prisma from "@/lib/prisma";
 import ListItem from "@/components/list_item";
-import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import Navbar from "@/components/navbar";
+import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -65,8 +65,8 @@ export default async function EventPage({
 
   return (
     <>
-      <Breadcrumbs
-        links={[
+      <Navbar
+        breadcrumbLinks={[
           { href: "/", text: "oleagues.nz" },
           { href: "/leagues", text: "Leagues" },
           {

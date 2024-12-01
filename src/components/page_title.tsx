@@ -13,7 +13,7 @@ export default function PageTitle({
   subtitle_href?: string;
 }) {
   return (
-    <div className="mt-8 mb-12">
+    <div className="mt-8 mb-3 sm:mb-6">
       <h1
         className={`mb-2 text-3xl sm:text-6xl font-bold ${
           underline && "underline"
