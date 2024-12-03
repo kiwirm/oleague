@@ -5,9 +5,7 @@ SELECT
   `oypoints`.`competitor_eligibility`.`grade_id` AS `grade_id`,
   `oypoints`.`competitor_eligibility`.`eligibility_id` AS `eligibility_id`,
   `oypoints`.`competitor_placing`.`total_points` AS `total_points`,
-  `oypoints`.`competitor_placing`.`prediction` AS `predicted_points`,
-  `oypoints`.`competitor_placing`.`placing` AS `placing`,
-  `oypoints`.`competitor_placing`.`predicted_placing` AS `predicted_placing`
+  `oypoints`.`competitor_placing`.`placing` AS `placing`
 FROM
   (
     `oypoints`.`competitor_eligibility`

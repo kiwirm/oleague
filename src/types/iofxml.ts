@@ -131,3 +131,27 @@ export type ResultList = {
     }>;
   };
 };
+
+interface PersonResult {
+  Person: {
+    Id: { _text: string };
+    Name: {
+      Given: { _text: string };
+      Family: { _text: string };
+    };
+  };
+  Result: {
+    Status: { _text: string };
+    Time?: { _text: string };
+    Score?: { _text: string };
+    FinalScore?: { _text: string };
+  };
+}
+
+interface ClassResult {
+  Class: {
+    Name: { _text: string };
+    ShortName: { _text: string };
+  };
+  PersonResult: PersonResult | PersonResult[];
+}

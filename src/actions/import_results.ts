@@ -1,12 +1,10 @@
 "use server";
 
 import prisma from "@/lib/prisma";
-import { xml2json } from "xml-js";
-import Fuse, { FuseResult } from "fuse.js";
-import { readFileSync, write, writeFile, writeFileSync } from "fs";
-import { race, result_status_result_id } from "@prisma/client";
 import { ResultList } from "@/types/iofxml";
-import { Prisma } from "@prisma/client";
+import { race, result_status_result_id } from "@prisma/client";
+import Fuse, { FuseResult } from "fuse.js";
+import { xml2json } from "xml-js";
 
 export interface resultsUploadResponse {
   persistence: {
@@ -117,26 +115,31 @@ export const handleResultsFile = async (
           )[0]?.grade_id ||
           null,
         potentialMatches: grades,
-        results: classResult.PersonResult.map((personResult) => {
-          const fullName =
-            personResult.Person.Name.Given._text +
-            " " +
-            personResult.Person.Name.Family._text;
+        results:
+          classResult.PersonResult &&
+          (Array.isArray(classResult.PersonResult)
+            ? classResult.PersonResult
+            : [classResult.PersonResult]
+          ).map((personResult) => {
+            const fullName =
+              personResult.Person.Name.Given._text +
+              " " +
+              personResult.Person.Name.Family._text;
 
-          const matches = fuse.search(fullName);
+            const matches = fuse.search(fullName);
 
-          return {
-            id: personResult.Person.Id._text,
-            name: fullName,
-            match:
-              matches.length && matches[0].score
-                ? matches[0].score < 0.05
-                  ? matches[0].item.onz_id
-                  : null
-                : null,
-            potentialMatches: matches,
-          };
-        }),
+            return {
+              id: personResult.Person.Id._text,
+              name: fullName,
+              match:
+                matches.length && matches[0].score
+                  ? matches[0].score < 0.05
+                    ? matches[0].item.onz_id
+                    : null
+                  : null,
+              potentialMatches: matches,
+            };
+          }),
       })),
     },
   };
@@ -166,7 +169,8 @@ export const handleResultsImport = async (
         (classResult) =>
           formData.get(classResult.Class.ShortName._text) !==
             "Not a ranked grade" &&
-          formData.get(classResult.Class.ShortName._text) !== null
+          formData.get(classResult.Class.ShortName._text) !== null &&
+          classResult.PersonResult.push
       ).map((classResult) => ({
         league_id: resultsUploadResponse.league_id,
         season_id: resultsUploadResponse.season_id,
@@ -183,33 +187,41 @@ export const handleResultsImport = async (
             "Not a ranked grade" &&
           formData.get(classResult.Class.ShortName._text) !== null
       ).flatMap((classResult) =>
-        classResult.PersonResult.filter(
-          (personResult) =>
-            formData.get(personResult.Person.Id._text) !== "Not a member" &&
-            formData.get(personResult.Person.Id._text) !== null
-        ).map((personResult) => ({
-          league_id: resultsUploadResponse.league_id,
-          season_id: resultsUploadResponse.season_id,
-          event_number: +event_number,
-          race_number: +race_number,
-          onz_id: +formData.get(personResult.Person.Id._text)!,
-          race_grade: classResult.Class.ShortName._text,
-          status_result_id: {
-            OK: result_status_result_id.OK,
-            MissingPunch: result_status_result_id.MP,
-            DidNotFinish: result_status_result_id.DNF,
-            DidNotStart: result_status_result_id.DNS,
-          }[personResult.Result.Status._text],
-          time: personResult.Result.Time
-            ? +personResult.Result.Time._text
-            : null,
-          raw_score: personResult.Result.Score
-            ? +personResult.Result.Score
-            : null,
-          score: personResult.Result.FinalScore
-            ? +personResult.Result.FinalScore
-            : null,
-        }))
+        (Array.isArray(classResult.PersonResult)
+          ? classResult.PersonResult
+          : [classResult.PersonResult]
+        )
+          .filter(
+            (personResult) =>
+              formData.get(personResult.Person.Id._text) !== "Not a member" &&
+              formData.get(personResult.Person.Id._text) !== null &&
+              !["DidNotStart", "Inactive"].includes(
+                personResult.Result.Status._text
+              )
+          )
+          .map((personResult) => ({
+            league_id: resultsUploadResponse.league_id,
+            season_id: resultsUploadResponse.season_id,
+            event_number: +event_number,
+            race_number: +race_number,
+            onz_id: +formData.get(personResult.Person.Id._text)!,
+            race_grade: classResult.Class.ShortName._text,
+            status_result_id: {
+              OK: result_status_result_id.OK,
+              MissingPunch: result_status_result_id.MP,
+              DidNotFinish: result_status_result_id.DNF,
+              DidNotStart: result_status_result_id.DNS,
+            }[personResult.Result.Status._text],
+            time: personResult.Result.Time
+              ? +personResult.Result.Time._text
+              : null,
+            raw_score: personResult.Result.Score
+              ? +personResult.Result.Score
+              : null,
+            score: personResult.Result.FinalScore
+              ? +personResult.Result.FinalScore
+              : null,
+          }))
       ),
     }),
   ]);

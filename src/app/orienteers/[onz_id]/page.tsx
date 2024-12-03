@@ -47,8 +47,9 @@ export default async function OrienteerPage({
     <div>
       <Navbar
         breadcrumbLinks={[
-          { label: "Orienteers", href: "/orienteers" },
-          { label: orienteer.name, href: `/orienteers/${params.onz_id}` },
+          { href: "/", text: "oleagues.nz" },
+          { text: "Orienteers", href: "/orienteers" },
+          { text: orienteer.full_name, href: `/orienteers/${params.onz_id}` },
         ]}
       />
       <PageTitle>
@@ -89,7 +90,7 @@ export default async function OrienteerPage({
         ))}
       <PageSubtitle>Results</PageSubtitle>
       {competitors
-        .filter((competitor) => competitor.season!.provisional)
+        .filter((competitor) => !competitor.season!.provisional)
         .map((competitor) => (
           <ListItem
             header={

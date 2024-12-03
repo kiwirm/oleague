@@ -66,7 +66,6 @@ export default async function StatsPage({
     competitor.onz_id,
     competitor.points,
   ]);
-  console.log(selectedCompetitors);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">

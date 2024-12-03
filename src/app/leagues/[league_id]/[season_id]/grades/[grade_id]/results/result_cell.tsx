@@ -50,7 +50,6 @@ export default function ResultCell(competitor, points) {
             <Tooltip>
               <TooltipTrigger>
                 <span className="material-symbols-rounded">
-                  {console.log(points.status_grade)}
                   {statusGradeMap[points.status_grade]?.icon}
                 </span>
               </TooltipTrigger>

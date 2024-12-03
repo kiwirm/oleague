@@ -1,6 +1,5 @@
-import React from "react";
-import PageSubtitle from "@/components/page_subtitle";
 import { resultsUploadResponse } from "@/actions/import_results";
+import PageSubtitle from "@/components/page_subtitle";
 
 import { Result } from "@/actions/import_results";
 
@@ -96,45 +95,47 @@ const matchInfo = (results: Result[]) => (
 function MemberAssign(resultsUploadResponse: resultsUploadResponse) {
   return (
     <>
-      {resultsUploadResponse.parsedResults.race.map((classResult) => (
-        <div key={classResult.name}>
-          <h1 className="text-xl font-bold">{classResult.name}</h1>
-          <label>Select grade:</label>
-          {gradeSelect(classResult)}
-          <div>
+      {resultsUploadResponse.parsedResults.race
+        .filter((classResult) => classResult.results)
+        .map((classResult) => (
+          <div key={classResult.name}>
+            <h1 className="text-xl font-bold">{classResult.name}</h1>
+            <label>Select grade:</label>
+            {gradeSelect(classResult)}
             <div>
-              {classResult.results
-                .filter(
-                  (result) =>
-                    result.match === null && result.potentialMatches.length
-                ) // only show unmatched results
-                .map((result) => (
-                  <div
-                    key={result.id}
-                    className="flex flex-row justify-between items-center my-2"
-                  >
-                    <label className="flex-1 text-lg">{result.name}</label>
-                    {memberSelect(result)}
-                  </div>
-                ))}
-            </div>
-            <div>
-              {
-                classResult.results
-                  .filter((result) => result.match)
+              <div>
+                {classResult.results
+                  .filter(
+                    (result) =>
+                      result.match === null && result.potentialMatches.length
+                  ) // only show unmatched results
                   .map((result) => (
-                    <input
-                      type="hidden"
-                      name={result.id}
-                      value={result.match!}
-                    />
-                  )) //hidden input for matched results
-              }
+                    <div
+                      key={result.id}
+                      className="flex flex-row justify-between items-center my-2"
+                    >
+                      <label className="flex-1 text-lg">{result.name}</label>
+                      {memberSelect(result)}
+                    </div>
+                  ))}
+              </div>
+              <div>
+                {
+                  classResult.results
+                    .filter((result) => result.match)
+                    .map((result) => (
+                      <input
+                        type="hidden"
+                        name={result.id}
+                        value={result.match!}
+                      />
+                    )) //hidden input for matched results
+                }
+              </div>
+              {matchInfo(classResult.results)}
             </div>
-            {matchInfo(classResult.results)}
           </div>
-        </div>
-      ))}
+        ))}
     </>
   );
 }

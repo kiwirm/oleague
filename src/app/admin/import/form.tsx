@@ -5,10 +5,10 @@ import {
   handleResultsImport,
 } from "@/actions/import_results";
 import { Prisma } from "@prisma/client";
-import { useActionState } from "react";
-import FormUpload from "./form_upload";
-import FormImport from "./form_import";
 import Link from "next/link";
+import { useActionState } from "react";
+import FormImport from "./form_import";
+import FormUpload from "./form_upload";
 
 export const seasonsWithLeagues = Prisma.validator<Prisma.seasonDefaultArgs>()({
   include: { league: true },
@@ -36,14 +36,16 @@ export default function ImportForm({
           <p>Success</p>
           <p>Imported {importResponse.response_grade_mapping.count} grades</p>
           <p>Imported {importResponse.response_result.count} results</p>
-          <Link href="/" passHref>
-            Return to home
-          </Link>
+          <p className="mt-5">
+            <Link href="/" className="text-gray-500">
+              Return to home
+            </Link>
+          </p>
         </div>
       )}
 
       {!resultsUploadResponse && <FormUpload seasons={seasons} />}
-      {resultsUploadResponse && (
+      {resultsUploadResponse && !importResponse && (
         <FormImport
           resultsUploadResponse={resultsUploadResponse}
           // importPending={importPending}

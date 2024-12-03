@@ -11,76 +11,25 @@ WITH `total_points` AS (
     `oypoints`.`points`.`season_id`,
     `oypoints`.`points`.`onz_id`
 ),
-`predicted_points` AS (
-  SELECT
-    `oypoints`.`season`.`league_id` AS `league_id`,
-    `oypoints`.`season`.`season_id` AS `season_id`,
-    `total_points`.`onz_id` AS `onz_id`,
-    least(
-      (
-        (
-          `total_points`.`total_points` / `oypoints`.`season`.`last_event`
-        ) * `oypoints`.`season`.`num_events`
-      ),
-(
-        `oypoints`.`season`.`max_points` * `oypoints`.`season`.`num_events`
-      )
-    ) AS `prediction`
-  FROM
-    (
-      `total_points`
-      JOIN `oypoints`.`season` ON(
-        (
-          (
-            `oypoints`.`season`.`league_id` = `total_points`.`league_id`
-          )
-          AND (
-            `oypoints`.`season`.`season_id` = `total_points`.`season_id`
-          )
-        )
-      )
-    )
-),
 `ranked_points` AS (
   SELECT
     `total_points`.`league_id` AS `league_id`,
     `total_points`.`season_id` AS `season_id`,
     `total_points`.`onz_id` AS `onz_id`,
     `total_points`.`total_points` AS `total_points`,
-    `predicted_points`.`prediction` AS `prediction`,
     `oypoints`.`competitor_eligibility`.`grade_id` AS `grade_id`,
+    `oypoints`.`competitor_eligibility`.`eligibility_id` AS `eligibility`,
     rank() OVER (
       PARTITION BY `total_points`.`league_id`,
       `total_points`.`season_id`,
       `oypoints`.`competitor_eligibility`.`grade_id`
       ORDER BY
+        `oypoints`.`competitor_eligibility`.`eligibility_id` DESC,
         `total_points`.`total_points` DESC
-    ) AS `placing`,
-    rank() OVER (
-      PARTITION BY `total_points`.`league_id`,
-      `total_points`.`season_id`,
-      `oypoints`.`competitor_eligibility`.`grade_id`
-      ORDER BY
-        `predicted_points`.`prediction` DESC
-    ) AS `predicted_placing`
+    ) AS `placing`
   FROM
     (
-      (
-        `total_points`
-        JOIN `predicted_points` ON(
-          (
-            (
-              `predicted_points`.`league_id` = `total_points`.`league_id`
-            )
-            AND (
-              `predicted_points`.`season_id` = `total_points`.`season_id`
-            )
-            AND (
-              `total_points`.`onz_id` = `predicted_points`.`onz_id`
-            )
-          )
-        )
-      )
+      `total_points`
       JOIN `oypoints`.`competitor_eligibility` ON(
         (
           (
@@ -98,12 +47,11 @@ WITH `total_points` AS (
 )
 SELECT
   `ranked_points`.`league_id` AS `league_id`,
+  `ranked_points`.`eligibility` AS `eligibility`,
   `ranked_points`.`season_id` AS `season_id`,
   `ranked_points`.`onz_id` AS `onz_id`,
   `ranked_points`.`total_points` AS `total_points`,
-  `ranked_points`.`prediction` AS `prediction`,
   `ranked_points`.`grade_id` AS `grade_id`,
-  `ranked_points`.`placing` AS `placing`,
-  `ranked_points`.`predicted_placing` AS `predicted_placing`
+  `ranked_points`.`placing` AS `placing`
 FROM
   `ranked_points`
