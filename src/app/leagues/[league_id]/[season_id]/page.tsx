@@ -36,11 +36,9 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default async function LeagueSeasonPage(
-  props: {
-    params: Promise<{ league_id: string; season_id: string }>;
-  }
-) {
+export default async function LeagueSeasonPage(props: {
+  params: Promise<{ league_id: string; season_id: string }>;
+}) {
   const params = await props.params;
   const season = await prisma.season.findUnique({
     where: {
@@ -161,7 +159,7 @@ export default async function LeagueSeasonPage(
           href={`${grade.season_id}/grades/${grade.grade_id}/results`}
           header={grade.name}
           summary={
-            grade.competitor[0].orienteer ? (
+            grade.competitor[0]?.orienteer ? (
               <TextWithIcon
                 text={grade.competitor[0].orienteer.full_name!}
                 icon="trophy"
