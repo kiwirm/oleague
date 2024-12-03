@@ -70,6 +70,7 @@ export default async function OrienteerPage({
         .map((competitor) => (
           <ListItem
             header={competitor.season!.league.name}
+            key={competitor.onz_id}
             summary={
               <>
                 <TextWithIcon
@@ -98,6 +99,7 @@ export default async function OrienteerPage({
               " " +
               competitor.season!.league.name
             }
+            key={competitor.onz_id}
             summary={
               <>
                 <TextWithIcon

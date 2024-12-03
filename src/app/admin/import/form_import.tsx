@@ -126,6 +126,7 @@ function MemberAssign(resultsUploadResponse: resultsUploadResponse) {
                     .map((result) => (
                       <input
                         type="hidden"
+                        key={result.id}
                         name={result.id}
                         value={result.match!}
                       />

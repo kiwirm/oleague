@@ -5,6 +5,7 @@ import ListItem from "@/components/list_item";
 import Navbar from "@/components/navbar";
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 
 export async function generateStaticParams() {
   const leagues = await prisma.league.findMany({
@@ -85,18 +86,19 @@ export default async function EventPage({
       />
       <PageTitle>{pageTitle}</PageTitle>
       {oevent.race.map((race) => (
-        <>
+        <Fragment key={race.race_number}>
           <PageSubtitle>
             Race {race.race_number}: {race.map}
           </PageSubtitle>
           {race.grade_mapping.map((race_grade) => (
             <ListItem
+              key={race_grade.race_grade}
               header={race_grade.grade.name}
               href={"none"}
               summary={"Race splits not yet available"}
             />
           ))}
-        </>
+        </Fragment>
       ))}
     </>
   );
