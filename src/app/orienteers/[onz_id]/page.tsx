@@ -7,11 +7,12 @@ import { notFound } from "next/navigation";
 import ordinal from "ordinal";
 import prisma from "../../../lib/prisma";
 
-export default async function OrienteerPage({
-  params,
-}: {
-  params: { onz_id: string };
-}) {
+export default async function OrienteerPage(
+  props: {
+    params: Promise<{ onz_id: string }>;
+  }
+) {
+  const params = await props.params;
   const orienteer = await prisma.orienteer.findUnique({
     where: {
       onz_id: +params.onz_id,

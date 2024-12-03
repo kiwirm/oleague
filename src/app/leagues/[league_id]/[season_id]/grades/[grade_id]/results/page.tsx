@@ -5,11 +5,12 @@ import ResultCell from "./result_cell";
 import RowHeader from "./row_header";
 import RowTotals from "./row_totals";
 
-export default async function ResultsPage({
-  params,
-}: {
-  params: { league_id: string; season_id: string; grade_id: string };
-}) {
+export default async function ResultsPage(
+  props: {
+    params: Promise<{ league_id: string; season_id: string; grade_id: string }>;
+  }
+) {
+  const params = await props.params;
   const grade = await prisma.grade.findUnique({
     where: {
       league_id_season_id_grade_id: {

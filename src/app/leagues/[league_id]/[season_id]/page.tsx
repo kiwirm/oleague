@@ -36,11 +36,12 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default async function LeagueSeasonPage({
-  params,
-}: {
-  params: { league_id: string; season_id: string };
-}) {
+export default async function LeagueSeasonPage(
+  props: {
+    params: Promise<{ league_id: string; season_id: string }>;
+  }
+) {
+  const params = await props.params;
   const season = await prisma.season.findUnique({
     where: {
       league_id_season_id: {

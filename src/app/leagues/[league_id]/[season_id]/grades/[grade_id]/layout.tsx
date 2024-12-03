@@ -3,13 +3,18 @@ import PageTitle from "@/components/page_title";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
 
-export default async function GradeLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { league_id: string; season_id: string; grade_id: string };
-}) {
+export default async function GradeLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ league_id: string; season_id: string; grade_id: string }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   const grade = await prisma.grade.findUnique({
     where: {
       league_id_season_id_grade_id: {

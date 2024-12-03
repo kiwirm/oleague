@@ -37,11 +37,12 @@ export async function generateStaticParams() {
   return paths;
 }
 
-export default async function EventPage({
-  params,
-}: {
-  params: { league_id: string; season_id: string; event_number: string };
-}) {
+export default async function EventPage(
+  props: {
+    params: Promise<{ league_id: string; season_id: string; event_number: string }>;
+  }
+) {
+  const params = await props.params;
   const oevent = await prisma.event.findUnique({
     where: {
       league_id_season_id_event_number: {
