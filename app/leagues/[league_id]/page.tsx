@@ -22,6 +22,7 @@ export async function generateStaticParams() {
 
   return paths;
 }
+await prisma.$disconnect();
 
 export default async function LeaguePage(props: {
   params: Promise<{ league_id: string }>;

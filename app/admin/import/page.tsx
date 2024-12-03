@@ -11,6 +11,7 @@ export default async function ImportPage() {
       league: true,
     },
   });
+  await prisma.$disconnect();
 
   return (
     <>

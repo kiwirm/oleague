@@ -24,6 +24,7 @@ export async function generateStaticParams() {
       },
     },
   });
+  await prisma.$disconnect();
 
   const paths = leagues.flatMap((league) =>
     league.season.flatMap((season) =>

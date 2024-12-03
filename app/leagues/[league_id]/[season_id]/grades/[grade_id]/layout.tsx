@@ -29,6 +29,7 @@ const GradeLayout = async (props: {
       },
     },
   });
+  await prisma.$disconnect();
 
   if (!grade) {
     return null;

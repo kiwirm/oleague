@@ -36,6 +36,7 @@ export default async function StatsPage(props: {
       },
     },
   });
+  await prisma.$disconnect();
 
   if (!grade) {
     return notFound();

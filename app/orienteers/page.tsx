@@ -18,6 +18,7 @@ const OrienteerSearchPage = async ({ showNavbar = true }) => {
       },
     },
   });
+  await prisma.$disconnect();
 
   return (
     <>

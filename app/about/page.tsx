@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/breadcrumb";
 import Title from "@/components/title";
 
-import GithubMark from "@/public/github-mark.png";
+import GithubMark from "@/public/images/github-mark.png";
 
 import Image from "next/image";
 

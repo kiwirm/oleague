@@ -26,6 +26,7 @@ const leagues = await prisma.league.findMany({
     },
   },
 });
+await prisma.$disconnect();
 
 const LeaguesPage = async ({ showNavbar = true }) => (
   <div className="object-fill">

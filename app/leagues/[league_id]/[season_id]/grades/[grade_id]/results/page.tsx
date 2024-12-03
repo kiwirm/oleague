@@ -40,6 +40,7 @@ const ResultsPage = async (props: {
       },
     },
   });
+  await prisma.$disconnect();
 
   if (!grade) {
     return notFound();

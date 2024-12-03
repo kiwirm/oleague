@@ -44,6 +44,7 @@ const OrienteerPage = async (props: {
       grade: true,
     },
   });
+  await prisma.$disconnect();
 
   return (
     <div>
