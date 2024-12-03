@@ -16,7 +16,10 @@ const statusGradeMap = {
   RUNNING_UP: { icon: "arrow_upward", description: "Running Up A Grade" },
   RUNNING_DOWN: { icon: "arrow_downward", description: "Running Down A Grade" },
   ORGANISING: { icon: "construction", description: "Organiser" },
-  RUNNING_OTHER: { icon: "question_mark", description: "?" },
+  RUNNING_OTHER: {
+    icon: "question_mark",
+    description: "Running in Wrong Grade",
+  },
 };
 
 const statusResultMap = {
@@ -42,7 +45,7 @@ export default function ResultCell(competitor, points) {
       }
     >
       <div className="text-2xl font-bold font-title">
-        {points.points ? +points.points : ""}
+        {points.points ? +points.points : "\u00A0"}
       </div>
       <div className="text-right">
         {points.status_grade != "RUNNING" && (
