@@ -7,6 +7,23 @@ import CompetitorHeader from "./competitor-header";
 import EventHeader from "./event-header";
 import PointTotal from "./point-total";
 
+export async function generateStaticParams() {
+  const grades = await prisma.grade.findMany({
+    select: {
+      league_id: true,
+      season_id: true,
+      grade_id: true,
+    },
+  });
+  await prisma.$disconnect();
+
+  return grades.map((grade) => ({
+    league_id: grade.league_id,
+    season_id: grade.season_id,
+    grade_id: grade.grade_id,
+  }));
+}
+
 const ResultsPage = async (props: {
   params: Promise<{ league_id: string; season_id: string; grade_id: string }>;
 }) => {

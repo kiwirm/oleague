@@ -18,7 +18,7 @@ const Cell = ({ eligible, points }: { eligible: boolean; points: points }) => {
           ? //TODO: status_grade should be an enum in Prisma
             points.status_result &&
             statusResults[points.status_result as result_status_result_id].color
-          : "text-muted-foreground italic")
+          : " text-muted-foreground italic")
       }
     >
       <div className="text-2xl font-bold font-title">

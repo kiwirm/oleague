@@ -26,6 +26,7 @@ export const statusResults = {
   NA: { icon: "close", tooltip: "DNF or Mispunch", color: "bg-inherit" },
   DNF: { icon: "close", tooltip: "Did Not Finish", color: "bg-inherit" },
   DNS: { icon: "close", tooltip: "Did Not Start", color: "bg-inherit" },
+  NW: { icon: "close", tooltip: "No Eligible Winner", color: "bg-inherit" },
 };
 
 export const eligibility = {
