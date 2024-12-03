@@ -6,6 +6,8 @@ WITH `total_points` AS (
     sum(`oypoints`.`points`.`points`) AS `total_points`
   FROM
     `oypoints`.`points`
+  WHERE
+    (0 <> `oypoints`.`points`.`counts_towards_total`)
   GROUP BY
     `oypoints`.`points`.`league_id`,
     `oypoints`.`points`.`season_id`,

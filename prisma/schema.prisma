@@ -201,17 +201,17 @@ view points_sparse {
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view competitor {
-  league_id      String     @db.VarChar(45)
-  season_id      String     @db.VarChar(45)
+  league_id      String    @db.VarChar(45)
+  season_id      String    @db.VarChar(45)
   onz_id         Int
-  grade_id       String     @db.VarChar(3)
-  eligibility_id String     @default("") @db.VarChar(4)
-  total_points   Decimal?   @db.Decimal(65, 4)
-  placing        BigInt     @default(0) @db.UnsignedBigInt
+  grade_id       String    @db.VarChar(3)
+  eligibility_id String    @default("") @db.VarChar(4)
+  total_points   Decimal?  @db.Decimal(65, 4)
+  placing        BigInt    @default(0) @db.UnsignedBigInt
   points         points[]
-  orienteer      orienteer? @relation(fields: [onz_id], references: [onz_id])
-  grade          grade?     @relation(fields: [league_id, season_id, grade_id], references: [league_id, season_id, grade_id])
-  season         season?    @relation(fields: [league_id, season_id], references: [league_id, season_id])
+  orienteer      orienteer @relation(fields: [onz_id], references: [onz_id])
+  grade          grade?    @relation(fields: [league_id, season_id, grade_id], references: [league_id, season_id, grade_id])
+  season         season?   @relation(fields: [league_id, season_id], references: [league_id, season_id])
 
   @@id([league_id, season_id, onz_id])
 }

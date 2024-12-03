@@ -507,7 +507,7 @@ WITH `potential_grade_allocated_results` AS (
     `calculated_points`.`season_id` AS `season_id`,
     `calculated_points`.`onz_id` AS `onz_id`,
     `calculated_points`.`event_number` AS `event_number`,
-    rank() OVER (
+    row_number() OVER (
       PARTITION BY `calculated_points`.`league_id`,
       `calculated_points`.`season_id`,
       `calculated_points`.`onz_id`
