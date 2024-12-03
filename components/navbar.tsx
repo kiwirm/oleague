@@ -68,10 +68,10 @@ const Navbar = ({
   return (
     <nav className="flex flex-row justify-between items-center p-4">
       <Breadcrumbs links={breadcrumbLinks} />
-      <div className="sm:hidden">
+      <div className="sm:hidden ml-8">
         <MobileMenu />
       </div>
-      <div className="hidden sm:block">
+      <div className="hidden sm:block ml-8">
         <DesktopMenu />
       </div>
     </nav>
