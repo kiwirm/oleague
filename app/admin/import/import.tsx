@@ -1,16 +1,12 @@
 import Subtitle from "@/components/subtitle";
 
-import { resultsUploadResponse } from "@/lib/import-results";
-
 import Link from "next/link";
 
 import MemberAssign from "./import-member-assign";
 
-const RaceSelect = ({
-  resultsUploadResponse,
-}: {
-  resultsUploadResponse: resultsUploadResponse;
-}) => (
+import { ImportResponse, UploadResponse } from "@/lib/handle-results";
+
+const RaceSelect = ({ uploadResponse }: { uploadResponse: UploadResponse }) => (
   <select
     name="event_number_and_race_number"
     className="px-3 py-2 rounded border border-gray-300 w-auto flex-1"
@@ -19,7 +15,7 @@ const RaceSelect = ({
     <option hidden disabled>
       Select a race...
     </option>
-    {resultsUploadResponse.races.map((race) => (
+    {uploadResponse.races.map((race) => (
       <option
         key={race.event_number + "_" + race.race_number}
         value={race.event_number + "|" + race.race_number}
@@ -35,7 +31,11 @@ const RaceSelect = ({
   </select>
 );
 
-const ImportSuccess = ({ importResponse }) => (
+const ImportSuccess = ({
+  importResponse,
+}: {
+  importResponse: ImportResponse;
+}) => (
   <div>
     <p>Success</p>
     <p>Imported {importResponse.response_grade_mapping.count} grades</p>
@@ -53,19 +53,22 @@ const ImportForm = ({
   importPending,
   payload,
 }: {
-  payload: resultsUploadResponse;
+  importResponse: ImportResponse | null;
+  importPending: boolean;
+  payload: UploadResponse;
 }) => (
   <div>
     <Subtitle>Import Results</Subtitle>
-    (importResponse ? (
-    <ImportSuccess importResponse={importResponse} />) : (
-    <>
-      <Subtitle>Select race</Subtitle>
-      <RaceSelect resultsUploadResponse={resultsUploadResponse} />
-      <Subtitle>Assign competitors to members</Subtitle>
-      <MemberAssign resultsUploadResponse={resultsUploadResponse} />
-    </>
-    ))
+    {importResponse ? (
+      <ImportSuccess importResponse={importResponse} />
+    ) : (
+      <>
+        <Subtitle>Select race</Subtitle>
+        <RaceSelect uploadResponse={payload} />
+        <Subtitle>Assign competitors to members</Subtitle>
+        <MemberAssign uploadResponse={payload} />
+      </>
+    )}
     {importPending && <div>Importing results...</div>}
   </div>
 );

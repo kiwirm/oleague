@@ -13,6 +13,7 @@
     "camaro": "^6.2.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "fast-xml-parser": "^4.5.0",
     "fuse.js": "^7.0.0",
     "lucide-react": "^0.462.0",
     "material-symbols": "^0.27.1",
@@ -26,8 +27,7 @@
     "recharts": "^2.14.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "tsconfig-paths": "^4.2.0",
-    "xml-js": "^1.6.11"
+    "tsconfig-paths": "^4.2.0"
   },
   "overrides": {
     "react": "$react",
@@ -37,6 +37,7 @@
     "@types/node": "^22.10.1",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "copy-webpack-plugin": "^12.0.2",
     "eslint": "^9.16.0",
     "eslint-config-next": "^15.0.3",
     "postcss": "^8.4.49",

@@ -28,7 +28,7 @@ const leagues = await prisma.league.findMany({
 });
 await prisma.$disconnect();
 
-const LeaguesPage = async ({ showNavbar = true }) => (
+const LeaguesPage = async ({ showNavbar }: { showNavbar: boolean }) => (
   <div className="object-fill">
     {showNavbar && (
       <Navbar breadcrumbLinks={[{ text: "Leagues", href: "/leagues" }]} />

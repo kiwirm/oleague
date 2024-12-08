@@ -2,25 +2,30 @@ import Subtitle from "@/components/subtitle";
 
 import { Prisma } from "@prisma/client";
 
+import { UploadResponse } from "@/lib/handle-results";
+import { ResultList } from "@/lib/iof-xml";
 import { seasonsWithLeagues } from "@/lib/prisma";
 
-const UploadSuccess = ({ parsedResults }) => (
-  //TODO ceebs typing
+const UploadSuccess = ({ resultList }: { resultList: ResultList }) => (
   <table>
     <tbody>
       <tr>
         <td>Event:</td>
-        <td>{parsedResults.eventName}</td>
+        <td>{resultList.name}</td>
+      </tr>
+      <tr>
+        <td>Event Date:</td>
+        {/* <td>{resultList.date.toISOString()}</td> */}
       </tr>
       <tr>
         <td>Created by:</td>
         <td>
-          {parsedResults.creator} (xmlns: {parsedResults.xmlns})
+          {resultList.creator} (IOF XML datastandard {resultList.dataVersion})
         </td>
       </tr>
       <tr>
-        <td>Date:</td>
-        <td>{parsedResults.date.toLocaleDateString()}</td>
+        <td>Created Time:</td>
+        {/* <td>{resultList.createTime.toISOString()}</td> */}
       </tr>
     </tbody>
   </table>
@@ -31,12 +36,14 @@ const UploadForm = ({
   uploadPending,
   payload,
 }: {
+  uploadResponse: UploadResponse | null;
+  uploadPending: boolean;
   payload: Prisma.seasonGetPayload<typeof seasonsWithLeagues>[];
 }) => (
   <div>
     <Subtitle>Upload Results</Subtitle>
     {uploadResponse ? (
-      <UploadSuccess parsedResults={uploadResponse.parsedResults} />
+      <UploadSuccess resultList={uploadResponse.payload.resultList} />
     ) : (
       <>
         <Subtitle>Select season</Subtitle>

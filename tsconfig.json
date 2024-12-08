@@ -15,6 +15,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./lib/@types"
+    ],
     "incremental": true,
     "plugins": [
       {
@@ -32,6 +36,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "lib/@types/camaro.d.ts.old",
     ".next/types/**/*.ts"
   ],
   "exclude": [

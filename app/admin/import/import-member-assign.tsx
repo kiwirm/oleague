@@ -1,8 +1,8 @@
-import { Result } from "@/lib/import-results";
+import { GradeMatch, ResultMatch, UploadResponse } from "@/lib/handle-results";
 
-const MemberSelect = ({ result }: { result: Result }) => (
+const MemberSelect = ({ match }: { match: ResultMatch }) => (
   <select
-    name={result.id}
+    name={match.xml_id.toString()}
     defaultValue={undefined}
     className="px-3 py-2 rounded border border-gray-300 w-auto flex-1"
   >
@@ -10,109 +10,98 @@ const MemberSelect = ({ result }: { result: Result }) => (
       Select a member...
     </option>
     <option>Not a member</option>
-    {result.potentialMatches.map((match) => (
-      <option key={match.item.onz_id} value={match.item.onz_id}>
-        {match.item.full_name}
+    {match.match_close.map((closeMatch) => (
+      <option key={closeMatch.match.id} value={closeMatch.match.id}>
+        {closeMatch.match.name}
       </option>
     ))}
   </select>
 );
 
-const GradeSelect = ({
-  classResult,
-}: {
-  classResult: {
-    potentialMatches: { name: string; grade_id: string }[];
-    match: string | null;
-    name: string;
-    id: string;
-  };
-}) => (
+const GradeSelect = ({ match }: { match: GradeMatch }) => (
   <select
-    name={classResult.id}
-    defaultValue={classResult.match ? classResult.match : "Select a grade..."}
+    name={match.xml_id.toString()}
+    defaultValue={match.match_id ? match.match_id : "Select a grade..."}
     className="px-3 py-2 rounded border border-gray-300 w-auto flex-1"
   >
     <option hidden disabled>
       Select a grade...
     </option>
     <option>Not a ranked grade</option>
-    {classResult.potentialMatches.map((grade) => (
-      <option key={grade.grade_id} value={grade.grade_id}>
-        {grade.name}
+    {match.match_close.map((closeMatch) => (
+      <option key={closeMatch} value={closeMatch}>
+        {closeMatch}
       </option>
     ))}
   </select>
 );
 
-const MatchInfo = ({ results }: { results: Result[] }) => (
-  <>
-    <div className="text-xs mb-3">
-      Competitors{" "}
-      {results
-        .filter((result) => result.match)
-        .map((result) => result.name)
-        .join(", ")}{" "}
-      were assigned automatically
-    </div>
-    <div className="text-xs">
-      Competitors{" "}
-      {results
-        .filter(
-          (result) => result.match === null && !result.potentialMatches.length
-        )
-        .map((result) => result.name)
-        .join(", ")}{" "}
-      could not be assigned
-    </div>
-  </>
-);
+// const MatchInfo = ({ results }: { results: Result[] }) => (
+//   <>
+//     <div className="text-xs mb-3">
+//       Competitors{" "}
+//       {results
+//         .filter((result) => result.match)
+//         .map((result) => result.name)
+//         .join(", ")}{" "}
+//       were assigned automatically
+//     </div>
+//     <div className="text-xs">
+//       Competitors{" "}
+//       {results
+//         .filter(
+//           (result) => result.match === null && !result.potentialMatches.length
+//         )
+//         .map((result) => result.name)
+//         .join(", ")}{" "}
+//       could not be assigned
+//     </div>
+//   </>
+// );
 
 const MemberAssign = ({
-  resultsUploadResponse,
+  uploadResponse,
 }: {
-  resultsUploadResponse: resultsUploadResponse;
+  uploadResponse: UploadResponse;
 }) => (
   <>
-    {resultsUploadResponse.parsedResults.race
-      .filter((classResult) => classResult.results)
-      .map((classResult) => (
-        <div key={classResult.name}>
-          <h1 className="text-xl font-bold">{classResult.name}</h1>
+    {uploadResponse.payload.resultList.grades
+      .filter((grade) => grade.results.length)
+      .map((grade) => (
+        <div key={grade.name}>
+          <h1 className="text-xl font-bold">{grade.name}</h1>
           <label>Select grade:</label>
-          <GradeSelect classResult={classResult} />
+          <GradeSelect
+            match={
+              uploadResponse.matches.grades.find(
+                (match) => match.xml_id === grade.xml_id
+              )!
+            }
+          />
           <div>
-            <div>
-              {classResult.results
-                .filter(
-                  (result) =>
-                    result.match === null && result.potentialMatches.length
-                ) // only show unmatched results
-                .map((result) => (
-                  <div
-                    key={result.id}
-                    className="flex flex-row justify-between items-center my-2"
-                  >
-                    <label className="flex-1 text-lg">{result.name}</label>
-                    <MemberSelect result={result} />
-                  </div>
-                ))}
-            </div>
-            <div>
-              {
-                classResult.results
-                  .filter((result) => result.match)
-                  .map((result) => (
-                    <input
-                      type="hidden"
-                      key={result.id}
-                      name={result.id}
-                      value={result.match!}
-                    />
-                  )) //hidden input for matched results
-              }
-            </div>
-            <MatchInfo results={classResult.results} />
+            {grade.results.map((result) => {
+              const match = uploadResponse.matches.results.find(
+                (match) => match.xml_id === result.competitor.xml_id
+              )!;
+              console.log(match);
+              const competitorName = `${result.competitor.firstName} ${result.competitor.lastName}`;
+              return match.match_perfect ? (
+                <input
+                  type="hidden"
+                  key={result.competitor.xml_id}
+                  name={result.competitor.xml_id.toString()}
+                  value={match.match_perfect.id}
+                />
+              ) : match.match_close.length ? (
+                <div
+                  key={result.competitor.xml_id}
+                  className="flex flex-row justify-between items-center my-2"
+                >
+                  <label className="flex-1 text-lg">{competitorName}</label>
+                  <MemberSelect match={match} />
+                </div>
+              ) : null;
+            })}
           </div>
         </div>
       ))}

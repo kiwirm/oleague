@@ -264,17 +264,18 @@ enum organiser_organiser_role_id {
   CTRL
 }
 
-enum result_status_result_id {
-  DNF
-  DNS
-  MP
-  OK
-}
-
 enum race_discipline {
   FOR
   SCO
   NGT
   MTB
   SPR
+}
+
+enum result_status_result_id {
+  DNF
+  DNS
+  MP
+  OK
+  DQ
 }

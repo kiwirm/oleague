@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/button";
 
-import { handleResultsFile, handleResultsImport } from "@/lib/import-results";
+import { handleImport, handleUpload } from "@/lib/handle-results";
 import { seasonsWithLeagues } from "@/lib/prisma";
 
 import { Prisma } from "@prisma/client";
@@ -18,11 +18,11 @@ const ResultsForm = ({
   seasons: Prisma.seasonGetPayload<typeof seasonsWithLeagues>[];
 }) => {
   const [uploadResponse, uploadAction, uploadPending] = useActionState(
-    handleResultsFile,
+    handleUpload,
     null
   );
   const [importResponse, importAction, importPending] = useActionState(
-    handleResultsImport.bind(null, uploadResponse?.persistence!),
+    handleImport.bind(null, uploadResponse?.payload!),
     null
   );
   return (
