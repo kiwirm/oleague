@@ -22,7 +22,9 @@ const MobileMenu = () => (
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end">
       <DropdownMenuItem>
-        <Link href="/admin/import">Admin</Link>
+        <Link href="/admin/import" prefetch={false}>
+          Admin
+        </Link>
       </DropdownMenuItem>
       <DropdownMenuItem>
         <Link href="/about">About</Link>
@@ -44,6 +46,7 @@ const DesktopMenu = () => (
   <ul className="hidden md:flex flex-row justify-end items-center gap-5">
     <Link
       href="/admin/import"
+      prefetch={false}
       className="text-muted-foreground hover:text-foreground transition-colors"
     >
       Admin
