@@ -146,6 +146,7 @@ model season {
   participation_points Int
   last_event           Int
   provisional          Boolean
+  max_events           Int?
   event                event[]
   grade                grade[]
   league               league       @relation(fields: [league_id], references: [league_id], map: "fk__season__league")
@@ -191,7 +192,7 @@ view points_sparse {
   status_grade         String   @default("") @db.VarChar(13)
   status_result        String   @default("") @db.VarChar(4)
   points               Decimal? @db.Decimal(62, 4)
-  counts_towards_total Int      @default(0)
+  counts_towards_total Int?
   placing              BigInt   @default(0) @db.UnsignedBigInt
   event                event?   @relation(fields: [league_id, season_id, event_number], references: [league_id, season_id, event_number])
 
@@ -251,7 +252,7 @@ view points {
   status_grade         String?     @default("") @db.VarChar(13)
   status_result        String?     @default("") @db.VarChar(4)
   points               Decimal?    @db.Decimal(62, 4)
-  counts_towards_total Int?        @default(0)
+  counts_towards_total Int?
   placing              BigInt?     @default(0) @db.UnsignedBigInt
   competitor           competitor? @relation(fields: [league_id, season_id, onz_id], references: [league_id, season_id, onz_id])
 

@@ -528,7 +528,23 @@ WITH `potential_grade_allocated_results` AS (
     `calculated_points`.`status_result` AS `status_result`,
     `calculated_points`.`points` AS `points`,
 (
-      (`ranked_points`.`ranked` <= 5)
+      (
+        `ranked_points`.`ranked` <= (
+          SELECT
+            `oypoints`.`season`.`max_events`
+          FROM
+            `oypoints`.`season`
+          WHERE
+            (
+              (
+                `oypoints`.`season`.`league_id` = `calculated_points`.`league_id`
+              )
+              AND (
+                `oypoints`.`season`.`season_id` = `calculated_points`.`season_id`
+              )
+            )
+        )
+      )
       AND (
         `oypoints`.`competitor_eligibility`.`eligibility_id` <> 'INEL'
       )

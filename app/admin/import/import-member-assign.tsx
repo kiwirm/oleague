@@ -83,7 +83,6 @@ const MemberAssign = ({
               const match = uploadResponse.matches.results.find(
                 (match) => match.xml_id === result.competitor.xml_id
               )!;
-              console.log(match);
               const competitorName = `${result.competitor.firstName} ${result.competitor.lastName}`;
               return match.match_perfect ? (
                 <input

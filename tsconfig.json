@@ -36,7 +36,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "lib/@types/camaro.d.ts.old",
+    "lib/@types/camaro.d.ts",
     ".next/types/**/*.ts"
   ],
   "exclude": [
