@@ -34,9 +34,9 @@ export default function ListRow({
             <div>{more}</div>
           </Link>
         )}
-        <span className="material-symbols-rounded shrink-0">
-          arrow_forward_ios
-        </span>
+        <Link href={href} className="shrink-0">
+          <span className="material-symbols-rounded">arrow_forward_ios</span>
+        </Link>
       </div>
     </div>
   );

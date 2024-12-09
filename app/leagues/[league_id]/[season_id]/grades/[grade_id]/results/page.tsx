@@ -69,8 +69,9 @@ const ResultsPage = async (props: {
       <table className="relative w-full border-collapse">
         <thead>
           <tr className="border-b">
-            <th className="border-r">
-              {grade.season.provisional ? "Current Placing" : "Place"}
+            <th className="px-2 border-r">
+              {/* {grade.season.provisional ? "Current Placing" : "Place"} */}
+              Place
             </th>
             <th className="sticky bg-background left-0 z-10 w-32 border-r">
               Competitor

@@ -115,6 +115,22 @@ export default async function LeagueSeasonPage(props: {
           />
         </span>
       </div>
+      <Subtitle>Grades</Subtitle>
+      {season.grade.map((grade) => (
+        <ListItem
+          key={grade.grade_id}
+          href={`${grade.season_id}/grades/${grade.grade_id}/results`}
+          header={grade.name}
+          summary={
+            grade.competitor[0]?.orienteer ? (
+              <TextWithIcon
+                text={grade.competitor[0].orienteer.full_name!}
+                icon="trophy"
+              />
+            ) : undefined
+          }
+        />
+      ))}
       <Subtitle>Events</Subtitle>
       {season.event.map((oevent) => (
         <ListItem
@@ -145,22 +161,6 @@ export default async function LeagueSeasonPage(props: {
                 icon="sports_score"
               />
             </>
-          }
-        />
-      ))}
-      <Subtitle>Grades</Subtitle>
-      {season.grade.map((grade) => (
-        <ListItem
-          key={grade.grade_id}
-          href={`${grade.season_id}/grades/${grade.grade_id}/results`}
-          header={grade.name}
-          summary={
-            grade.competitor[0]?.orienteer ? (
-              <TextWithIcon
-                text={grade.competitor[0].orienteer.full_name!}
-                icon="trophy"
-              />
-            ) : undefined
           }
         />
       ))}
