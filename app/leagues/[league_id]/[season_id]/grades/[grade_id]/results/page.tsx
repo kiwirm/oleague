@@ -18,9 +18,9 @@ export async function generateStaticParams() {
   await prisma.$disconnect();
 
   return grades.map((grade) => ({
-    league_id: grade.league_id,
+    league_id: grade.league_id.toLowerCase(),
     season_id: grade.season_id,
-    grade_id: grade.grade_id,
+    grade_id: grade.grade_id.toLowerCase(),
   }));
 }
 

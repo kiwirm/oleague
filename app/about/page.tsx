@@ -1,4 +1,4 @@
-import { Breadcrumbs } from "@/components/breadcrumb";
+import Navbar from "@/components/navbar";
 import Title from "@/components/title";
 
 import GithubMark from "@/public/images/github-mark.png";
@@ -7,10 +7,10 @@ import Image from "next/image";
 
 const AboutPage = () => (
   <>
-    <Breadcrumbs
-      links={[
+    <Navbar
+      breadcrumbLinks={[
         { href: "/", text: "oleagues.nz" },
-        { href: "about", text: "About" },
+        { text: "About", href: "/about" },
       ]}
     />
     <Title>About oleagues.nz</Title>
@@ -25,7 +25,7 @@ const AboutPage = () => (
       Prisma, MySQL, Docker
     </p>
     <p className="mb-8">
-      Mixed Static/SSG rendering using Next 15 server actions and App Router
+      Mixed Static/SSR rendering using Next 15 server actions and App Router
     </p>
 
     <a

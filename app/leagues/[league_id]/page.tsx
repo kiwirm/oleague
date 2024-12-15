@@ -17,7 +17,7 @@ export async function generateStaticParams() {
   });
 
   const paths = leagues.map((league) => ({
-    league_id: league.league_id.toString(),
+    league_id: league.league_id.toString().toLowerCase(),
   }));
 
   return paths;
@@ -30,7 +30,7 @@ export default async function LeaguePage(props: {
   const params = await props.params;
   const league = await prisma.league.findUnique({
     where: {
-      league_id: params.league_id,
+      league_id: params.league_id.toUpperCase(),
     },
     include: {
       season: {
@@ -46,7 +46,6 @@ export default async function LeaguePage(props: {
       },
     },
   });
-  const seasons = await prisma.season.findMany({});
 
   if (league === null) {
     return notFound();

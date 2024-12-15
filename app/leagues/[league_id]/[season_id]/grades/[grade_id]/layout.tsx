@@ -4,6 +4,7 @@ import Title from "@/components/title";
 import prisma from "@/lib/prisma";
 
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 const GradeLayout = async (props: {
   children: React.ReactNode;
@@ -16,9 +17,9 @@ const GradeLayout = async (props: {
   const grade = await prisma.grade.findUnique({
     where: {
       league_id_season_id_grade_id: {
-        league_id: params.league_id,
+        league_id: params.league_id.toUpperCase(),
         season_id: params.season_id,
-        grade_id: params.grade_id,
+        grade_id: params.grade_id.toUpperCase(),
       },
     },
     include: {
@@ -31,8 +32,8 @@ const GradeLayout = async (props: {
   });
   await prisma.$disconnect();
 
-  if (!grade) {
-    return null;
+  if (grade === null) {
+    return notFound();
   }
 
   return (
