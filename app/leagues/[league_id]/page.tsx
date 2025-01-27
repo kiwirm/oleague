@@ -8,6 +8,7 @@ import Title from "@/components/title";
 import prisma from "@/lib/prisma";
 
 import { notFound } from "next/navigation";
+import pluralize from "pluralize";
 
 export async function generateStaticParams() {
   const leagues = await prisma.league.findMany({
@@ -63,7 +64,10 @@ export default async function LeaguePage(props: {
       <Title>{league.name}</Title>
 
       <div className="mb-4 text-muted-foreground">
-        <TextWithIcon text={league.season.length + " Seasons"} icon="sunny" />
+        <TextWithIcon
+          text={pluralize("seasons", league.season.length, true)}
+          icon="sunny"
+        />
       </div>
 
       <Subtitle>Seasons</Subtitle>
@@ -83,15 +87,19 @@ export default async function LeaguePage(props: {
             summary={
               <>
                 <TextWithIcon
-                  text={season.event.length + " Events"}
+                  text={pluralize("events", season.event.length, true)}
                   icon="forest"
                 />
                 <TextWithIcon
-                  text={season.competitor.length + " Competitors"}
+                  text={pluralize(
+                    "competitors",
+                    season.competitor.length,
+                    true
+                  )}
                   icon="sprint"
                 />
                 <TextWithIcon
-                  text={season.grade.length + " Grades"}
+                  text={pluralize("grades", season.grade.length, true)}
                   icon="receipt_long"
                 />
               </>

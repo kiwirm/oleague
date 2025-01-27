@@ -9,6 +9,7 @@ import { disciplines } from "@/lib/enums";
 import prisma from "@/lib/prisma";
 
 import { notFound } from "next/navigation";
+import pluralize from "pluralize";
 
 export async function generateStaticParams() {
   const leagues = await prisma.league.findMany({
@@ -59,7 +60,7 @@ export default async function LeagueSeasonPage(props: {
       },
       event: {
         include: {
-          points_sparse: true,
+          points: true,
           race: {
             include: {
               result: true,
@@ -100,21 +101,34 @@ export default async function LeagueSeasonPage(props: {
       </Title>
       <div className="mb-4 text-muted-foreground">
         <span className="mr-4">
-          <TextWithIcon text={season.event.length + " Events"} icon="forest" />
+          <TextWithIcon
+            text={pluralize("events", season.event.length, true)}
+            icon="forest"
+          />
         </span>
         <span className="mr-4">
           <TextWithIcon
-            text={season.competitor.length + " Competitors"}
+            text={pluralize("competitors", season.competitor.length, true)}
             icon="sprint"
           />
         </span>
         <span>
           <TextWithIcon
-            text={season.grade.length + " Grades"}
+            text={pluralize("grades", season.grade.length, true)}
             icon="receipt_long"
           />
         </span>
       </div>
+      <TextWithIcon
+        icon="info"
+        text={
+          pluralize("event", season.events_min, true) +
+          " required to qualify, best " +
+          pluralize("event", season.events_max!, true) +
+          " count towards total"
+        }
+      />
+
       <Subtitle>Grades</Subtitle>
       {season.grade.map((grade) => (
         <ListItem
@@ -140,9 +154,9 @@ export default async function LeagueSeasonPage(props: {
             <TextWithIcon
               icon={disciplines[oevent.race[0].discipline].icon}
               text={
-                "OY" +
+                "Event " +
                 oevent.event_number +
-                " " +
+                ": " +
                 oevent.race.map((race) => race.map).join(", ")
               }
             />
@@ -150,7 +164,7 @@ export default async function LeagueSeasonPage(props: {
           summary={
             <>
               <TextWithIcon
-                text={oevent.points_sparse.length + " Competitors"}
+                text={oevent.points.length + " Competitors"}
                 icon="sprint"
               />
               <TextWithIcon

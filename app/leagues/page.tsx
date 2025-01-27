@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
 import Image, { StaticImageData } from "next/image";
 
+import pluralize from "pluralize";
+
 import { Button } from "@/components/button";
 import ListItem from "@/components/list-row";
 import Navbar from "@/components/navbar";
@@ -28,10 +30,15 @@ const leagues = await prisma.league.findMany({
 });
 await prisma.$disconnect();
 
-const LeaguesPage = async ({ showNavbar }: { showNavbar: boolean }) => (
+const LeaguesPage = async ({ showNavbar = true }) => (
   <div className="object-fill">
     {showNavbar && (
-      <Navbar breadcrumbLinks={[{ text: "Leagues", href: "/leagues" }]} />
+      <Navbar
+        breadcrumbLinks={[
+          { text: "oleagues.nz", href: "/" },
+          { text: "Leagues", href: "/leagues" },
+        ]}
+      />
     )}
     <Title>Leagues</Title>
     {leagues.map((league) => (
@@ -53,7 +60,10 @@ const LeaguesPage = async ({ showNavbar }: { showNavbar: boolean }) => (
           )
         }
         summary={
-          <TextWithIcon text={league.season.length + " seasons"} icon="sunny" />
+          <TextWithIcon
+            text={pluralize("seasons", league.season.length, true)}
+            icon="sunny"
+          />
         }
         more={
           league.season[0] && (
