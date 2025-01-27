@@ -19,7 +19,7 @@ const EventHeader = ({
           href={`/leagues/${event.league_id}/${event.season_id}/events/${event.event_number}`}
         >
           <TextWithIcon
-            text={"OY " + event.event_number}
+            text={"Event " + event.event_number}
             //TODO: this should be automatically typed correctly
             icon={disciplines[event.race[0].discipline as race_discipline].icon}
           />
