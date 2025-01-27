@@ -76,7 +76,7 @@ const OrienteerPage = async (props: {
         .map((competitor) => (
           <ListItem
             header={competitor.season!.league.name}
-            key={competitor.onz_id}
+            key={competitor.season!.league_id + competitor.season!.season_id}
             summary={
               <>
                 <TextWithIcon
@@ -105,7 +105,7 @@ const OrienteerPage = async (props: {
               " " +
               competitor.season!.league.name
             }
-            key={competitor.onz_id}
+            key={competitor.season!.league_id + competitor.season!.season_id}
             summary={
               <>
                 <TextWithIcon
