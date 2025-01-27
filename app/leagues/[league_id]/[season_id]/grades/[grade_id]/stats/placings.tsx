@@ -27,7 +27,7 @@ const PlacingsChart = ({
 }) => {
   const placingsData = grade.season.event.map((oevent) => {
     const sortedCompetitors = Object.entries(
-      pointsAfterEvent(grade, oevent)
+      pointsAfterEvent(grade, oevent, grade.season.last_event)
     ).sort((a, b) => b[1] - a[1]);
 
     //TODO: use true (rank) placing here

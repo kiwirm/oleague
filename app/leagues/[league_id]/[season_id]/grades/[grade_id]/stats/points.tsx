@@ -26,7 +26,7 @@ const PointsChart = ({
 }) => {
   const cumulativePointsData = grade.season.event.map((oevent) => ({
     event: oevent.race.map((race) => race.map).join(", "),
-    ...pointsAfterEvent(grade, oevent),
+    ...pointsAfterEvent(grade, oevent, grade.season.last_event),
   }));
 
   return (
