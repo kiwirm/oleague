@@ -6,9 +6,15 @@ import {
 } from "@/components/tooltip";
 
 import { statusGrades, statusResults } from "@/lib/enums";
-import { points, result_status_result_id } from "@prisma/client";
+import { points_dense, result_status_result_id } from "@prisma/client";
 
-const Cell = ({ eligible, points }: { eligible: boolean; points: points }) => {
+const Cell = ({
+  eligible,
+  points,
+}: {
+  eligible: boolean;
+  points: points_dense;
+}) => {
   return (
     <td
       key={points.event_number}

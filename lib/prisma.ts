@@ -33,7 +33,7 @@ export const eventWithRaces = Prisma.validator<Prisma.eventDefaultArgs>()({
 export const competitorExtended =
   Prisma.validator<Prisma.competitorDefaultArgs>()({
     include: {
-      points: true,
+      points_dense: true,
       orienteer: true,
     },
   });
