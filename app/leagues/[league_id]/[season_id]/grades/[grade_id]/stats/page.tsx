@@ -65,6 +65,13 @@ export default async function StatsPage(props: {
     competitor.points,
   ]);
 
+  const serealizedGrade = JSON.parse(
+    JSON.stringify(
+      grade,
+      (key, value) => (typeof value === "bigint" ? value.toString() : value) // return everything else unchanged
+    )
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
       <div className="flex flex-col items-center">
@@ -72,13 +79,13 @@ export default async function StatsPage(props: {
           Accumulated points
         </h1>
         <div className="h-72 w-full">
-          <PointsChart grade={grade} />
+          <PointsChart grade={serealizedGrade} />
         </div>
       </div>
       <div className="flex flex-col items-center font-title">
         <h1 className="mt-6 mb-2 font-bold text-xl">Placings over time</h1>
         <div className="h-72 w-full">
-          <PlacingsChart grade={grade} />
+          <PlacingsChart grade={serealizedGrade} />
         </div>
       </div>
       <div className="flex flex-col items-center">
@@ -86,7 +93,7 @@ export default async function StatsPage(props: {
           Medal allocation
         </h1>
         <div className="h-72 w-full">
-          <MedalsChart grade={grade} />
+          <MedalsChart grade={serealizedGrade} />
         </div>
       </div>
     </div>
