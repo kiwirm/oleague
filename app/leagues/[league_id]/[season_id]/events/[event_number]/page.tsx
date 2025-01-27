@@ -1,4 +1,3 @@
-import ListItem from "@/components/list-row";
 import Navbar from "@/components/navbar";
 import Subtitle from "@/components/subtitle";
 import Title from "@/components/title";
@@ -56,7 +55,8 @@ export default async function EventPage(props: {
       },
     },
     include: {
-      race: { include: { grade_mapping: { include: { grade: true } } } },
+      // race: { include: { grade_mapping: { include: { grade: true } } } },
+      race: true,
       season: { include: { grade: true, league: true } },
     },
   });
@@ -65,9 +65,9 @@ export default async function EventPage(props: {
     return notFound();
   }
 
-  const pageTitle = `OY ${oevent!.event_number} ${oevent!.race
+  const pageTitle = `Event ${oevent!.event_number}: ${oevent!.race
     .map((race) => race.map)
-    .join(" ")}`;
+    .join(", ")}`;
 
   return (
     <>
@@ -95,14 +95,15 @@ export default async function EventPage(props: {
           <Subtitle>
             Race {race.race_number}: {race.map}
           </Subtitle>
-          {race.grade_mapping.map((race_grade) => (
+          Split times not available for this race
+          {/* {race.grade_mapping.map((race_grade) => (
             <ListItem
               key={race_grade.race_grade}
               header={race_grade.grade.name}
               href={"none"}
               summary={"Race splits not yet available"}
             />
-          ))}
+          ))} */}
         </Fragment>
       ))}
     </>
