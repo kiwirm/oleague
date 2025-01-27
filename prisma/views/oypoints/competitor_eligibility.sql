@@ -69,25 +69,25 @@ WITH `grade_mapping_collapsed` AS (
     `events_competed`.`onz_id` AS `onz_id`,
     `events_competed`.`num_results` AS `num_results`,
 (
-      `oypoints`.`season`.`num_events` - `oypoints`.`season`.`last_event`
+      `oypoints`.`season`.`events_total` - `oypoints`.`season`.`last_event`
     ) AS `events_to_go`,
     greatest(
       (
-        `oypoints`.`season`.`required_events` - `events_competed`.`num_results`
+        `oypoints`.`season`.`events_min` - `events_competed`.`num_results`
       ),
       0
     ) AS `events_needed`,
 (
       CASE
         WHEN (
-          `events_competed`.`num_results` >= `oypoints`.`season`.`required_events`
+          `events_competed`.`num_results` >= `oypoints`.`season`.`events_min`
         ) THEN 'QUAL'
         WHEN (
           (
-            `oypoints`.`season`.`num_events` - `oypoints`.`season`.`last_event`
+            `oypoints`.`season`.`events_total` - `oypoints`.`season`.`last_event`
           ) < greatest(
             (
-              `oypoints`.`season`.`required_events` - `events_competed`.`num_results`
+              `oypoints`.`season`.`events_min` - `events_competed`.`num_results`
             ),
             0
           )

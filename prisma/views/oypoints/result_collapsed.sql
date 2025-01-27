@@ -5,6 +5,7 @@ SELECT
   `oypoints`.`result`.`event_number` AS `event_number`,
   sum(`oypoints`.`result`.`time`) AS `time`,
   min(`oypoints`.`result`.`race_grade`) AS `race_grade`,
+  min(`oypoints`.`result`.`scorer_id`) AS `scorer_id`,
 (
     CASE
       WHEN (
