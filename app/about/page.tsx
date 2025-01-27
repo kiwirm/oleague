@@ -18,7 +18,7 @@ const AboutPage = () => (
       oleagues.nz is a website for the New Zealand orienteering community. It
       provides a centralised location for orienteers to view rankings in various
       competitions throughout the year, updated after each event. Created by
-      Ryan Moore, &#169; 2024.
+      Ryan Moore, &#169; 2024-2025.
     </p>
     <p>
       Technology Stack: Typescript, React, Next.js, shadcn/ui, TailwindCSS,
