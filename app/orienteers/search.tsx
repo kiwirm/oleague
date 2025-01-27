@@ -48,14 +48,16 @@ const OrienteerSearch = ({ orienteers }: { orienteers: orienteer[] }) => {
           <ul>
             {filteredOrienteers.length > 0 ? (
               filteredOrienteers.map((orienteer, index) => (
-                <li
-                  key={orienteer.onz_id}
-                  className={`p-4 bg-muted hover:bg-gray-300 text-foreground`}
-                >
-                  <Link href={`/orienteers/${orienteer.onz_id}`}>
+                <Link href={`/orienteers/${orienteer.onz_id}`}>
+                  <li
+                    key={orienteer.onz_id}
+                    className={`p-4 bg-muted hover:bg-gray-200 text-foreground ${
+                      index === filteredOrienteers.length - 1 && "rounded-b-lg"
+                    }`}
+                  >
                     {orienteer.first_name} {orienteer.last_name}
-                  </Link>
-                </li>
+                  </li>
+                </Link>
               ))
             ) : (
               <li className="p-4 text-destructive-foreground">
