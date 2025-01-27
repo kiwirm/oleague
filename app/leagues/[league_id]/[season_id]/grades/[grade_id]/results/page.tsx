@@ -41,7 +41,7 @@ const ResultsPage = async (props: {
       competitor: {
         where: { grade_id: params.grade_id },
         include: {
-          points: true,
+          points_dense: true,
           orienteer: true,
         },
         orderBy: {
@@ -88,8 +88,11 @@ const ResultsPage = async (props: {
               key={competitor.onz_id}
               className="odd:bg-white even:bg-gray-50"
             >
-              <CompetitorHeader competitor={competitor} />
-              {competitor.points.map((eventPoints) => (
+              <CompetitorHeader
+                competitor={competitor}
+                displayEligibility={grade.season.events_min > 1}
+              />
+              {competitor.points_dense.map((eventPoints) => (
                 <Cell
                   key={eventPoints.event_number}
                   eligible={competitor.eligibility_id !== "INEL"}

@@ -9,8 +9,10 @@ import Link from "next/link";
 
 const CompetitorHeader = async ({
   competitor,
+  displayEligibility,
 }: {
   competitor: Prisma.competitorGetPayload<typeof competitorExtended>;
+  displayEligibility: boolean;
 }) => (
   <>
     <th
@@ -30,18 +32,20 @@ const CompetitorHeader = async ({
       <Link
         href={`/orienteers/${competitor.onz_id}`}
       >{`${competitor.orienteer.first_name} ${competitor.orienteer.last_name}`}</Link>
-      <div className="font-medium">
-        <TextWithIcon
-          text={
-            eligibility[competitor.eligibility_id as keyof typeof eligibility]
-              .name
-          }
-          icon={
-            eligibility[competitor.eligibility_id as keyof typeof eligibility]
-              .icon
-          }
-        />
-      </div>
+      {displayEligibility && (
+        <div className="font-medium">
+          <TextWithIcon
+            text={
+              eligibility[competitor.eligibility_id as keyof typeof eligibility]
+                .name
+            }
+            icon={
+              eligibility[competitor.eligibility_id as keyof typeof eligibility]
+                .icon
+            }
+          />
+        </div>
+      )}
     </th>
   </>
 );
