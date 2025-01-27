@@ -1,6 +1,8 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
 
+RUN apk add openssl
+
 COPY . .
 RUN npm ci
 
