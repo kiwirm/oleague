@@ -18,13 +18,13 @@ export default function ListRow({
       className="
       first:border-t border-b p-4 w-full odd:bg-white even:bg-gray-50 hover:bg-gray-100 mx-auto even:*bg-gray-50"
     >
-      <div className="flex flex-row items-center gap-10 justify-between">
+      <div className="flex flex-row items-center gap-2 sm:gap-10 justify-between">
         <Link href={href} className="flex flex-row flex-1 min-w-0">
           <div className="flex flex-row items-center gap-4 min-w-0">
             <div className="text-md sm:text-xl font-bold truncate">
               {header}
             </div>
-            <div className="hidden sm:flex flex-col sm:flex-row sm:gap-4 *:text-muted-foreground truncate">
+            <div className="hidden md:flex flex-col sm:flex-row sm:gap-4 *:text-muted-foreground">
               {summary}
             </div>
           </div>

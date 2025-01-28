@@ -119,15 +119,10 @@ export default async function LeagueSeasonPage(props: {
           />
         </span>
       </div>
-      <TextWithIcon
-        icon="info"
-        text={
-          pluralize("event", season.events_min, true) +
-          " required to qualify, best " +
-          pluralize("event", season.events_max!, true) +
-          " count towards total"
-        }
-      />
+      <p>
+        {pluralize("event", season.events_min, true)} required to qualify, best{" "}
+        {pluralize("event", season.events_max!, true)} count towards total
+      </p>
 
       <Subtitle>Grades</Subtitle>
       {season.grade.map((grade) => (
