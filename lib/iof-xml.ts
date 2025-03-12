@@ -1,4 +1,4 @@
-// import { transform } from "camaro";
+import * as camaro from "camaro"; // comment this when building for production
 
 const resultListTemplate = {
   name: "ResultList/Event/Name",
@@ -114,7 +114,7 @@ interface ResultList {
 
 const parseIOFXmlResultList = async (results: File): Promise<ResultList> => {
   const text = await results.text();
-  const resultList = await transform(text, resultListTemplate);
+  const resultList = await camaro.transform(text, resultListTemplate);
   //convert date strings to dates
   return {
     ...resultList,
