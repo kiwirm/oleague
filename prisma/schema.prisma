@@ -53,8 +53,7 @@ model grade_mapping {
   grade_id     String @db.VarChar(3)
   race_grade   String @db.VarChar(45)
 
-  @@index([league_id, season_id, grade_id], map: "fk__grade_mapping__grade")
-  @@ignore
+  @@id([league_id, season_id, grade_id, event_number, race_number])
 }
 
 model league {
@@ -127,12 +126,12 @@ model result {
   event_number     Int
   race_number      Int
   onz_id           Int
-  status_result_id result_status_result_id?
   race_grade       String                   @db.VarChar(45)
   scorer_id        String                   @db.VarChar(45)
   time             Int?
   raw_score        Int?
   score            Int?
+  status_result_id result_status_result_id?
   orienteer        orienteer                @relation(fields: [onz_id], references: [onz_id], map: "fk__result__orienteer")
   race             race                     @relation(fields: [league_id, season_id, event_number, race_number], references: [league_id, season_id, event_number, race_number], map: "fk__result__race")
   scorer           scorer                   @relation(fields: [scorer_id], references: [scorer_id], map: "fk__result__scorer")

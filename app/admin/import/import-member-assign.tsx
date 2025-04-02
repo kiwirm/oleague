@@ -18,6 +18,26 @@ const MemberSelect = ({ match }: { match: ResultMatch }) => (
   </select>
 );
 
+const ScorerSelect = ({uploadResponse, grade_id }: {uploadResponse: UploadResponse, grade_id: string}) => (
+  <select
+    name={grade_id + "_scorer"}
+    className="px-3 py-2 rounded border border-gray-300 w-auto flex-1"
+    defaultValue="Select a scorer..."
+  >
+    <option hidden disabled>
+      Select a scorer...
+    </option>
+    {uploadResponse.scorers.map((scorer) => (
+      <option
+        key={scorer.scorer_id}
+        value={scorer.scorer_id}
+      >
+        {scorer.scorer_id}
+      </option>
+    ))}
+  </select>
+)
+
 const GradeSelect = ({ match }: { match: GradeMatch }) => (
   <select
     name={match.xml_id.toString()}
@@ -78,6 +98,7 @@ const MemberAssign = ({
               )!
             }
           />
+          <ScorerSelect uploadResponse={uploadResponse} grade_id={grade.id} />
           <div>
             {grade.results.map((result) => {
               const match = uploadResponse.matches.results.find(

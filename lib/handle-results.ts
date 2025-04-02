@@ -1,6 +1,6 @@
 "use server";
 
-import { Prisma, race, result_status_result_id } from "@prisma/client";
+import { Prisma, race, result_status_result_id, scorer } from "@prisma/client";
 import { parseIOFXmlResultList, ResultList } from "./iof-xml";
 import prisma from "./prisma";
 
@@ -65,6 +65,7 @@ export interface UploadResponse {
     league_id: string;
     resultList: ResultList;
   };
+  scorers: scorer[];
   races: race[];
   matches: {
     grades: GradeMatch[];
@@ -91,6 +92,8 @@ export const handleUpload = async (currentState: any, formData: FormData) => {
       season_id,
     },
   });
+
+  const scorers = await prisma.scorer.findMany()
 
   //match grades
   const matchedGrades = resultList.grades.map((xml_grade) => ({
@@ -130,6 +133,7 @@ export const handleUpload = async (currentState: any, formData: FormData) => {
       resultList,
     },
     races,
+    scorers,
     matches: {
       grades: matchedGrades,
       results: matchedResults,
@@ -209,6 +213,7 @@ export const handleImport = async (
               event_number,
               race_number,
               race_grade: grade.id,
+              scorer_id: getMatched(grade.id + "_scorer")!,
               onz_id: +(getMatched(result.competitor.xml_id) as string),
               status_result_id: {
                 OK: result_status_result_id.OK,
