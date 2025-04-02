@@ -1,14 +1,9 @@
-// next.config.mjs
-
-const nextConfig = {
-  experimental: {
-    turbotrace
-  },
+module.exports ={
   staticPageGenerationTimeout: 1000,
   typescript: {
     ignoreBuildErrors: true,
   },
-    webpack: (config, context) => {
+    webpack: (config: any, context: any) => {
     config.experiments = {
       asyncWebAssembly: true,
       layers: true,
@@ -19,5 +14,3 @@ const nextConfig = {
     "/app/admin/import": ["./node_modules/camaro/dist/camaro.wasm"],
   },
 };
-
-export default nextConfig;
