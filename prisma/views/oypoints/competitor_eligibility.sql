@@ -47,20 +47,36 @@ WITH `grade_mapping_collapsed` AS (
 ),
 `events_competed` AS (
   SELECT
-    `oypoints`.`result_collapsed`.`league_id` AS `league_id`,
-    `oypoints`.`result_collapsed`.`season_id` AS `season_id`,
-    `oypoints`.`result_collapsed`.`onz_id` AS `onz_id`,
-    count(0) AS `num_results`
+    `competed`.`league_id` AS `league_id`,
+    `competed`.`season_id` AS `season_id`,
+    `competed`.`onz_id` AS `onz_id`,
+    count(DISTINCT `competed`.`event_number`) AS `num_results`
   FROM
-    `oypoints`.`result_collapsed`
-  WHERE
     (
-      `oypoints`.`result_collapsed`.`status_result` <> 'DNS'
-    )
+      SELECT
+        `oypoints`.`result_collapsed`.`league_id` AS `league_id`,
+        `oypoints`.`result_collapsed`.`season_id` AS `season_id`,
+        `oypoints`.`result_collapsed`.`onz_id` AS `onz_id`,
+        `oypoints`.`result_collapsed`.`event_number` AS `event_number`
+      FROM
+        `oypoints`.`result_collapsed`
+      WHERE
+        (
+          `oypoints`.`result_collapsed`.`status_result` <> 'DNS'
+        )
+      UNION
+      SELECT
+        `oypoints`.`organiser`.`league_id` AS `league_id`,
+        `oypoints`.`organiser`.`season_id` AS `season_id`,
+        `oypoints`.`organiser`.`onz_id` AS `onz_id`,
+        `oypoints`.`organiser`.`event_number` AS `event_number`
+      FROM
+        `oypoints`.`organiser`
+    ) `competed`
   GROUP BY
-    `oypoints`.`result_collapsed`.`league_id`,
-    `oypoints`.`result_collapsed`.`season_id`,
-    `oypoints`.`result_collapsed`.`onz_id`
+    `competed`.`league_id`,
+    `competed`.`season_id`,
+    `competed`.`onz_id`
 ),
 `eligibility` AS (
   SELECT
