@@ -11,7 +11,7 @@ const getMemberAndGradeSubset = async (
   season_id: string
 ) => {
   const members = await prisma.member.findMany({
-    where: { membership_year: "2024" }, //TODO: fix member hardcoding
+    where: { membership_year: season_id },
     include: {
       orienteer: {
         select: {
