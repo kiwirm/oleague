@@ -353,77 +353,76 @@ WITH `potential_grade_allocated_results` AS (
             OR (`oypoints`.`result_collapsed`.`score` IS NULL)
           ),
 (
-            floor(
+            greatest(
               (
-                greatest(
-                  (
-                    (
-                      `grade_winning_time`.`winning_time` / `oypoints`.`result_collapsed`.`time`
-                    ) * (
-                      SELECT
-                        `oypoints`.`scorer`.`scale`
-                      FROM
-                        `oypoints`.`scorer`
-                      WHERE
-                        (
-                          `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
-                        )
-                    )
-                  ),
-(
+                (
+                  `grade_winning_time`.`winning_time` * (
                     SELECT
-                      `oypoints`.`scorer`.`cutoff`
-                    FROM
-                      `oypoints`.`scorer`
-                    WHERE
-                      (
-                        `oypoints`.`scorer`.`scorer_id` = `grade_allocated_result`.`scorer_id`
-                      )
-                  )
-                ) * 10
-              )
-            ) / 10
-          ),
-(
-            floor(
-              (
-                greatest(
-                  (
-                    (
-                      (
-                        `oypoints`.`result_collapsed`.`score` / `grade_winning_time`.`winning_score`
-                      ) * IF(
-                        (
-                          `grade_winning_time`.`winning_score` = `grade_winning_time`.`score_to_clear`
-                        ),
-(
-                          `grade_winning_time`.`winning_time` / `grade_winning_time`.`slowest_winning_time`
-                        ),
-                        1
-                      )
-                    ) * (
-                      SELECT
-                        `oypoints`.`scorer`.`scale`
-                      FROM
-                        `oypoints`.`scorer`
-                      WHERE
-                        (
-                          `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
-                        )
-                    )
-                  ),
-(
-                    SELECT
-                      `oypoints`.`scorer`.`cutoff`
+                      `oypoints`.`scorer`.`scale`
                     FROM
                       `oypoints`.`scorer`
                     WHERE
                       (
                         `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
                       )
+                  ) * 10
+                ) DIV `oypoints`.`result_collapsed`.`time`
+              ),
+(
+                SELECT
+                  `oypoints`.`scorer`.`cutoff`
+                FROM
+                  `oypoints`.`scorer`
+                WHERE
+                  (
+                    `oypoints`.`scorer`.`scorer_id` = `grade_allocated_result`.`scorer_id`
                   )
-                ) * 10
-              )
+              ) * 10
+            ) / 10
+          ),
+(
+            greatest(
+              IF(
+                (
+                  `grade_winning_time`.`winning_score` = `grade_winning_time`.`score_to_clear`
+                ),
+                (
+                  `oypoints`.`result_collapsed`.`score` * `grade_winning_time`.`winning_time` * (
+                    SELECT
+                      `oypoints`.`scorer`.`scale`
+                    FROM
+                      `oypoints`.`scorer`
+                    WHERE
+                      (
+                        `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
+                      )
+                  ) * 10
+                ) DIV (
+                  `grade_winning_time`.`winning_score` * `grade_winning_time`.`slowest_winning_time`
+                ),
+                (
+                  `oypoints`.`result_collapsed`.`score` * (
+                    SELECT
+                      `oypoints`.`scorer`.`scale`
+                    FROM
+                      `oypoints`.`scorer`
+                    WHERE
+                      (
+                        `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
+                      )
+                  ) * 10
+                ) DIV `grade_winning_time`.`winning_score`
+              ),
+(
+                SELECT
+                  `oypoints`.`scorer`.`cutoff`
+                FROM
+                  `oypoints`.`scorer`
+                WHERE
+                  (
+                    `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
+                  )
+              ) * 10
             ) / 10
           )
         )
