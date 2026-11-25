@@ -263,8 +263,9 @@ WITH `potential_grade_allocated_results` AS (
           (`grade_winning_time`.`winning_time` IS NULL)
           AND (`grade_winning_time`.`winning_score` IS NULL)
           AND (
-            `grade_allocated_result`.`status_grade` <> 'ORGANISING'
+            `grade_allocated_result`.`status_grade` IN ('RUNNING', 'RUNNING_OTHER')
           )
+          AND (`grade_allocated_result`.`status_result` = 'OK')
         ) THEN 'NW'
         WHEN (
           (
@@ -301,10 +302,6 @@ WITH `potential_grade_allocated_results` AS (
               `oypoints`.`scorer`.`scorer_id` = `grade_allocated_result`.`scorer_id`
             )
         )
-        WHEN (
-          (`grade_winning_time`.`winning_time` IS NULL)
-          AND (`grade_winning_time`.`winning_score` IS NULL)
-        ) THEN 0
         WHEN (`grade_allocated_result`.`status_result` = 'DNS') THEN 0
         WHEN (
           `grade_allocated_result`.`status_result` IN ('MP', 'DNF', 'NA')
@@ -342,6 +339,10 @@ WITH `potential_grade_allocated_results` AS (
               `oypoints`.`scorer`.`scorer_id` = `oypoints`.`result_collapsed`.`scorer_id`
             )
         )
+        WHEN (
+          (`grade_winning_time`.`winning_time` IS NULL)
+          AND (`grade_winning_time`.`winning_score` IS NULL)
+        ) THEN 0
         WHEN (
           `grade_allocated_result`.`status_grade` = 'RUNNING'
         ) THEN IF(
